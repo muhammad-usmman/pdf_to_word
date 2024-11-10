@@ -7,6 +7,7 @@ import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/view/screens/home_scree/home_screen.dart';
 import 'package:pdf_to_word/view/screens/payment_screen/widgets/pro_features.dart';
 import 'package:pdf_to_word/view/screens/payment_screen/widgets/subscription_tiles.dart';
+import 'package:pdf_to_word/view/shared/custom_button.dart';
 
 class ProScreen extends StatefulWidget {
   const ProScreen({super.key});
@@ -26,7 +27,7 @@ class _ProScreenState extends State<ProScreen> {
           .read<ThemeCubit>()
           .state
           .themeData == AppThemes.light
-          ? Colors.redAccent.shade200
+          ? const Color(0xffd47474)
           : Colors.grey, // todo: add colors here
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 70),
@@ -126,23 +127,7 @@ class _ProScreenState extends State<ProScreen> {
                       ),
                     ),
                     10.verticalSpace,
-                    Container(
-                      width: 467,
-                      height: 75,
-                      decoration: BoxDecoration(
-                          color: AppColors.red,
-                          borderRadius: BorderRadius.circular(8)),
-                      child: const Center(
-                        child: Text(
-                          'Start free Traial',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 30,
-                          ),
-                        ),
-                      ),
-                    ),
+                    CustomButton(title: 'Start your Free Trail', onTap: (){}, height: 75, width: 467),
                     10.verticalSpace,
                     const Text(
                       "5 Days Free Trail, then 2000 \$ / Month",
@@ -156,7 +141,7 @@ class _ProScreenState extends State<ProScreen> {
                       onPressed: () {
                         Navigator.pushReplacement(
                             context, MaterialPageRoute(builder: (
-                            BuildContext context) =>   HomeScreen()));
+                            BuildContext context) =>   const HomeScreen()));
                       },
                       child: const Text(
                         'Continue with Free Plan',

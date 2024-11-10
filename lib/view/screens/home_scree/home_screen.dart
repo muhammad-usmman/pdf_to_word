@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_drop_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -107,50 +108,53 @@ class HomeScreen extends StatelessWidget {
                       crossAxisCount: 6,
                       crossAxisSpacing: 0,
                       mainAxisSpacing: 0,
-                      children: const [
+                      children:   [
                         ToolCard(
                           label: 'Image to PDF',
-                          svg: 'assets/svg/JPG to PDF.svg',
+                          svg: 'assets/svg/JPG to PDF.svg', onTap: () {  showDialog(
+                          context: context,
+                          builder: (BuildContext context) => DragDropDialog(),
+                        ); },
                         ),
                         ToolCard(
                           label: 'Image to Text',
-                          svg: 'assets/svg/IMAGE to text.svg',
+                          svg: 'assets/svg/IMAGE to text.svg', onTap: () {  },
                         ),
                         ToolCard(
                           label: 'PNG to JPG',
-                          svg: 'assets/svg/png to jpg.svg',
+                          svg: 'assets/svg/png to jpg.svg', onTap: () {  },
                         ),
                         ToolCard(
                           label: 'GIF to JPG',
-                          svg: 'assets/svg/gif to jpg.svg',
+                          svg: 'assets/svg/gif to jpg.svg', onTap: () {  },
                         ),
                         ToolCard(
                           label: 'JPG to PNG',
-                          svg: 'assets/svg/jpg to png.svg',
+                          svg: 'assets/svg/jpg to png.svg', onTap: () {  },
                         ),
                         ToolCard(
                           label: 'GIF to PNG',
-                          svg: 'assets/svg/gif to png.svg',
+                          svg: 'assets/svg/gif to png.svg', onTap: () {  },
                         ),
                         ToolCard(
                           label: 'PPT to ZIP',
-                          svg: 'assets/svg/PPT TO ZIP.svg',
+                          svg: 'assets/svg/PPT TO ZIP.svg', onTap: () {  },
                         ),
                         ToolCard(
                           label: 'Text to ZIP',
-                          svg: 'assets/svg/TXT TO ZIP.svg',
+                          svg: 'assets/svg/TXT TO ZIP.svg', onTap: () {  },
                         ),
                         ToolCard(
                           label: 'Image to ZIP',
-                          svg: 'assets/svg/IMG to ZIP.svg',
+                          svg: 'assets/svg/IMG to ZIP.svg', onTap: () {  },
                         ),
                         ToolCard(
                           label: 'Word to ZIP',
-                          svg: 'assets/svg/Word to ZIP.svg',
+                          svg: 'assets/svg/Word to ZIP.svg', onTap: () {  },
                         ),
                         ToolCard(
                           label: 'PDF to ZIP',
-                          svg: 'assets/svg/PDF to ZIP.svg',
+                          svg: 'assets/svg/PDF to ZIP.svg', onTap: () {  },
                         ),
                       ],
                     ),
@@ -198,32 +202,32 @@ class DrawerItem extends StatelessWidget {
 class ToolCard extends StatelessWidget {
   final String label;
   final String svg;
-
-  const ToolCard({super.key, required this.label, required this.svg});
+  final Function() onTap;
+  const ToolCard({super.key, required this.label, required this.svg, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
       width: 200,
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-        color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: SvgPicture.asset(
+      child: GestureDetector(
+        onTap: onTap,
+        child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          color: Colors.white,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
                 svg,
                 height: 80,
                 width: 80,
                 fit: BoxFit.scaleDown,
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(label, textAlign: TextAlign.center),
-          ],
+              const SizedBox(height: 10),
+              Text(label, textAlign: TextAlign.center),
+            ],
+          ),
         ),
       ),
     );
