@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +33,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Row(
         children: [
-           Container(
+          Container(
             width: 350,
             // Adjust width as needed
             color: Colors.red.shade700,
@@ -39,47 +41,55 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: ListView(
-                    children: [
-                      const DrawerItem(
+                    children: const [
+                      DrawerItem(
                           svg: 'assets/svg/home icon.svg', label: 'Home'),
-                      const DrawerItem(
+                      DrawerItem(
                           svg: 'assets/svg/convert to pdf.svg',
                           label: 'Convert To PDF'),
-                      const DrawerItem(
+                      DrawerItem(
                           svg: 'assets/svg/convert from pdf.svg',
                           label: 'Convert From PDF'),
-                      const DrawerItem(
+                      DrawerItem(
                           svg: 'assets/svg/PDF editor.svg',
                           label: 'PDF Editor'),
-                      const DrawerItem(
+                      DrawerItem(
                           svg: 'assets/svg/PDF tools.svg', label: 'PDF Tools'),
-                      const DrawerItem(
+                      DrawerItem(
                           svg: 'assets/svg/rate us.svg', label: 'Rate Us'),
-                      const DrawerItem(
+                      DrawerItem(
                           svg: 'assets/svg/Support.svg', label: 'Support'),
-                      const DrawerItem(
+                      DrawerItem(
                           svg: 'assets/svg/restore_purchase.svg',
                           label: 'Restore Purchase'),
                     ],
                   ),
                 ),
-
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
+                  child: GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Upgrade to Pro"),
-                        SizedBox(width: 8),
-                        Icon(Icons.workspace_premium, color: Colors.amber),
-                      ],
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Upgrade to Pro",
+                            style: TextStyle(
+                                fontSize: 22, fontWeight: FontWeight.w600),
+                          ),
+                          10.horizontalSpace,
+                          SvgPicture.asset(
+                            'assets/svg/pro icon.svg',
+                            width: 40,height: 40,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -95,20 +105,53 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: GridView.count(
                       crossAxisCount: 6,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 0,
+                      mainAxisSpacing: 0,
                       children: const [
-                        ToolCard(label: 'Image to PDF'),
-                        ToolCard(label: 'Image to Text'),
-                        ToolCard(label: 'PNG to JPG'),
-                        ToolCard(label: 'GIF to JPG'),
-                        ToolCard(label: 'JPG to PNG'),
-                        ToolCard(label: 'GIF to PNG'),
-                        ToolCard(label: 'PPT to ZIP'),
-                        ToolCard(label: 'Text to ZIP'),
-                        ToolCard(label: 'Image to ZIP'),
-                        ToolCard(label: 'Word to ZIP'),
-                        ToolCard(label: 'PDF to ZIP'),
+                        ToolCard(
+                          label: 'Image to PDF',
+                          svg: 'assets/svg/JPG to PDF.svg',
+                        ),
+                        ToolCard(
+                          label: 'Image to Text',
+                          svg: 'assets/svg/IMAGE to text.svg',
+                        ),
+                        ToolCard(
+                          label: 'PNG to JPG',
+                          svg: 'assets/svg/png to jpg.svg',
+                        ),
+                        ToolCard(
+                          label: 'GIF to JPG',
+                          svg: 'assets/svg/gif to jpg.svg',
+                        ),
+                        ToolCard(
+                          label: 'JPG to PNG',
+                          svg: 'assets/svg/jpg to png.svg',
+                        ),
+                        ToolCard(
+                          label: 'GIF to PNG',
+                          svg: 'assets/svg/gif to png.svg',
+                        ),
+                        ToolCard(
+                          label: 'PPT to ZIP',
+                          svg: 'assets/svg/PPT TO ZIP.svg',
+                        ),
+                        ToolCard(
+                          label: 'Text to ZIP',
+                          svg: 'assets/svg/TXT TO ZIP.svg',
+                        ),
+                        ToolCard(
+                          label: 'Image to ZIP',
+                          svg: 'assets/svg/IMG to ZIP.svg',
+                        ),
+                        ToolCard(
+                          label: 'Word to ZIP',
+                          svg: 'assets/svg/Word to ZIP.svg',
+                        ),
+                        ToolCard(
+                          label: 'PDF to ZIP',
+                          svg: 'assets/svg/PDF to ZIP.svg',
+                        ),
                       ],
                     ),
                   ),
@@ -154,19 +197,34 @@ class DrawerItem extends StatelessWidget {
 
 class ToolCard extends StatelessWidget {
   final String label;
+  final String svg;
 
-  const ToolCard({required this.label});
+  const ToolCard({super.key, required this.label, required this.svg});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Placeholder(fallbackHeight: 50, fallbackWidth: 50),
-          const SizedBox(height: 10),
-          Text(label, textAlign: TextAlign.center),
-        ],
+    return SizedBox(
+      height: 200,
+      width: 200,
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        color: Colors.white,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: SvgPicture.asset(
+                svg,
+                height: 80,
+                width: 80,
+                fit: BoxFit.scaleDown,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(label, textAlign: TextAlign.center),
+          ],
+        ),
       ),
     );
   }

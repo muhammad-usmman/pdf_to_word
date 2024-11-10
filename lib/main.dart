@@ -23,14 +23,15 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           return ScreenUtilInit(
-              designSize: Size(800, 600),
+              designSize: const Size(800, 600),
 
               minTextAdapt: true,
               splitScreenMode: false,
               // Use builder only if you need to use library outside ScreenUtilInit context
               builder: (_ , child) {
               return MaterialApp(
-                title: 'Flutter Demo',
+                debugShowCheckedModeBanner: false,
+                title: 'Document Convertor',
                 theme: state.themeData,
                 home: const SplashScreen(),
               );
