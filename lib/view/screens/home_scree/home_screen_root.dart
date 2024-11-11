@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pdf_to_word/view/screens/home_scree/widgets/convert_from_pdf.dart';
 import 'package:pdf_to_word/view/screens/home_scree/widgets/convert_to_pdf.dart';
 import 'package:pdf_to_word/view/screens/home_scree/widgets/home.dart';
 import 'package:pdf_to_word/view/shared/drawer_item.dart';
@@ -160,11 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Home(),
                 ConvertToPdf(),
-                Container(
-                  width: 25,
-                  height: 25,
-                  color: Colors.grey,
-                ),
+                ConvertFromPdf(),
                 Container(
                   width: 25,
                   height: 25,
