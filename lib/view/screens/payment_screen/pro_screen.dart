@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pdf_to_word/controller/cubits/theme_cubit.dart';
 import 'package:pdf_to_word/utils/colors.dart';
 import 'package:pdf_to_word/utils/themes.dart';
-import 'package:pdf_to_word/view/screens/home_scree/home_screen.dart';
+import 'package:pdf_to_word/view/screens/home_scree/home_screen_root.dart';
 import 'package:pdf_to_word/view/screens/payment_screen/widgets/pro_features.dart';
 import 'package:pdf_to_word/view/screens/payment_screen/widgets/subscription_tiles.dart';
 import 'package:pdf_to_word/view/shared/custom_button.dart';
