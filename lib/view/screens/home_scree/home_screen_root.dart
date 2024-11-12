@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pdf_to_word/view/screens/home_scree/widgets/convert_from_pdf.dart';
+ import 'package:pdf_to_word/view/screens/home_scree/widgets/convert_from_pdf.dart';
 import 'package:pdf_to_word/view/screens/home_scree/widgets/convert_to_pdf.dart';
 import 'package:pdf_to_word/view/screens/home_scree/widgets/home.dart';
+import 'package:pdf_to_word/view/screens/home_scree/widgets/pdf_tools.dart';
+import 'package:pdf_to_word/view/screens/pdf_editor/pdf_editor.dart';
 import 'package:pdf_to_word/view/shared/drawer_item.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -66,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           pageController.jumpToPage(1);
                           print(_currentPageIndex);
-
                         },
                       ),
                       DrawerItem(
@@ -75,16 +76,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           pageController.jumpToPage(2);
                           print(_currentPageIndex);
-
                         },
                       ),
                       DrawerItem(
                         svg: 'assets/svg/PDF editor.svg',
                         label: 'PDF Editor',
                         onTap: () {
-                          pageController.jumpToPage(3);
+                          // pageController.jumpToPage(3);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => const PDFEditor(),
+                            ),
+                          );
                           print(_currentPageIndex);
-
                         },
                       ),
                       DrawerItem(
@@ -93,7 +98,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           pageController.jumpToPage(4);
                           print(_currentPageIndex);
-
                         },
                       ),
                       DrawerItem(
@@ -158,20 +162,12 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               scrollDirection: Axis.vertical,
               controller: pageController,
-              children: [
+              children: const [
                 Home(),
                 ConvertToPdf(),
                 ConvertFromPdf(),
-                Container(
-                  width: 25,
-                  height: 25,
-                  color: Colors.green,
-                ),
-                Container(
-                  width: 25,
-                  height: 25,
-                  color: Colors.orange,
-                ),
+                SizedBox.shrink(),
+                PDFTools(),
               ],
             ),
           ),

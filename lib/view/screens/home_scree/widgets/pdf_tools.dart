@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_drop_dialog.dart';
 import 'package:pdf_to_word/view/shared/tool_card.dart';
 
-class ConvertFromPdf extends StatelessWidget {
-  const ConvertFromPdf({super.key});
+class PDFTools extends StatelessWidget {
+  const PDFTools({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +18,23 @@ class ConvertFromPdf extends StatelessWidget {
               mainAxisSpacing: 0,
               children: [
                 ToolCard(
-                  label: 'PDF to Word',
-                  svg: 'assets/svg/PDF to HTML.svg',
+                  label: 'Lock PDF',
+                  svg: 'assets/svg/Lock PDF.svg',
+                  onTap: () {},
+                ),
+                ToolCard(
+                  label: 'Unlock PDF',
+                  svg: 'assets/svg/Unlock PDF.svg',
+                  onTap: () {},
+                ),
+                ToolCard(
+                  label: 'Split PDF',
+                  svg: 'assets/svg/Split PDF.svg',
+                  onTap: () {},
+                ),
+                ToolCard(
+                  label: 'Merge PDF',
+                  svg: 'assets/svg/Merge PDF.svg',
                   onTap: () {
                     showDialog(
                       context: context,
@@ -28,21 +43,15 @@ class ConvertFromPdf extends StatelessWidget {
                   },
                 ),
                 ToolCard(
-                  label: 'PDF to JPG',
-                  svg: 'assets/svg/PDF to Image.svg',
+                  label: 'Delete Pages',
+                  svg: 'assets/svg/Delete Page.svg',
                   onTap: () {},
                 ),
                 ToolCard(
-                  label: 'PDF to Text',
-                  svg: 'assets/svg/PDF to Text.svg',
+                  label: 'Delete Blank Pages',
+                  svg: 'assets/svg/delete blank page icon.svg',
                   onTap: () {},
                 ),
-                ToolCard(
-                  label: 'PDF to HTML',
-                  svg: 'assets/svg/PDF to Word.svg',
-                  onTap: () {},
-                ),
-
               ],
             ),
           ),
