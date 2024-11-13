@@ -100,9 +100,8 @@ class PDFEditor extends StatelessWidget {
           Expanded(
             child: Container(
               decoration: const BoxDecoration(
-                  color: Colors.orange,
-                  image:
-                      DecorationImage(image: AssetImage('assets/svg/BG.png'), fit: BoxFit.cover)),
+
+                image: DecorationImage(image: AssetImage('assets/svg/BG.png'), fit: BoxFit.cover,),),
               child: Stack(
                 children: [
                   Center(
@@ -133,12 +132,67 @@ class PDFEditor extends StatelessWidget {
                     left: 0,
                     child: Container(
                       width: 125,
-                      color: Colors.blue,
-                      padding: EdgeInsets.symmetric(vertical: 35),
-                      child: Column(
-                        children: [
-                          Button(onTap: (){}, icon: Icons.add)
-                        ],
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.only(topRight: Radius.circular(8),bottomRight: Radius.circular(8)),
+
+                        gradient: LinearGradient(colors: [
+                          AppColors.red1,
+                          AppColors.red,
+                          AppColors.red1,
+                        ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+                      ),
+                      // padding: const EdgeInsets.symmetric(vertical: 35),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Button(onTap: () {}, icon: 'assets/svg/ICON.svg'),
+                            Button(onTap: () {}, icon: 'assets/svg/Add text.svg'),
+                            Button(onTap: () {}, icon: 'assets/svg/Icon3.svg'),
+                            Button(onTap: () {}, icon: 'assets/svg/Number.svg'),
+                            Button(onTap: () {}, icon: 'assets/svg/page bookmark.svg'),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                              child: Divider(
+                                height: 1.5,
+                                thickness: 1.5,
+                                color: Color(0xffe06868),
+                              ),
+                            ),
+                            Button(onTap: () {}, icon: 'assets/svg/save.svg'),
+                            Button(onTap: () {}, icon: 'assets/svg/dOWNLOAD.svg'),
+                            Button(onTap: () {}, icon: 'assets/svg/PRINT.svg'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 70,
+                    left: 150,
+                    child: Container(
+                      width: 75,
+                      height: 0.52.sh,
+                      decoration:  BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        gradient: const LinearGradient(colors: [
+                          AppColors.red1,
+                          AppColors.red,
+                          AppColors.red1,
+                        ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+                      ),
+                      // padding: const EdgeInsets.symmetric(vertical: 35),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Button(onTap: () {}, icon: 'assets/svg/ICON.svg'),
+                            Button(onTap: () {}, icon: 'assets/svg/Add text.svg'),
+                            Button(onTap: () {}, icon: 'assets/svg/Icon3.svg'),
+                            Button(onTap: () {}, icon: 'assets/svg/Number.svg'),
+                            Button(onTap: () {}, icon: 'assets/svg/Number.svg'),
+                            Button(onTap: () {}, icon: 'assets/svg/Number.svg'),
+
+                          ],
+                        ),
                       ),
                     ),
                   ),
