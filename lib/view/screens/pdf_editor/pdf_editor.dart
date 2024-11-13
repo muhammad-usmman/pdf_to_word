@@ -13,7 +13,7 @@ class PDFEditor extends StatefulWidget {
 
 class _PDFEditorState extends State<PDFEditor> {
   PageController pageController = PageController();
-  int _currentIndex = 0;
+  int _currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -156,23 +156,40 @@ class _PDFEditorState extends State<PDFEditor> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            Button(onTap: () {
-                              pageController.jumpToPage(0);
-                            }, icon: 'assets/svg/ICON.svg'),
-                            Button(onTap: () {                              pageController.jumpToPage(1);
-                            }, icon: 'assets/svg/Add text.svg'),
-                            Button(onTap: () {
-                              pageController.jumpToPage(3);
+                            Button(
+                                onTap: () {
+                                  pageController.jumpToPage(0);
+                                  print(_currentPageIndex);
+                                },
+                                icon: 'assets/svg/ICON.svg'),
+                            Button(
+                                onTap: () {
+                                  pageController.jumpToPage(1);
+                                  print(_currentPageIndex);
 
-                            }, icon: 'assets/svg/Icon3.svg'),
-                            Button(onTap: () {
-                              pageController.jumpToPage(4);
+                                },
+                                icon: 'assets/svg/Add text.svg'),
+                            Button(
+                                onTap: () {
+                                  pageController.jumpToPage(2);
+                                  print(_currentPageIndex);
 
-                            }, icon: 'assets/svg/Number.svg'),
-                            Button(onTap: () {
-                              pageController.jumpToPage(5 );
+                                },
+                                icon: 'assets/svg/Icon3.svg'),
+                            Button(
+                                onTap: () {
+                                  pageController.jumpToPage(3);
+                                  print(_currentPageIndex);
 
-                            }, icon: 'assets/svg/page bookmark.svg'),
+                                },
+                                icon: 'assets/svg/Number.svg'),
+                            Button(
+                                onTap: () {
+                                  pageController.jumpToPage(4);
+                                  print(_currentPageIndex);
+
+                                },
+                                icon: 'assets/svg/page bookmark.svg'),
                             const Padding(
                               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                               child: Divider(
@@ -199,9 +216,13 @@ class _PDFEditorState extends State<PDFEditor> {
                       child: PageView(
                         physics: const NeverScrollableScrollPhysics(),
                         controller: pageController,
+                        onPageChanged: (newPage) {
+                          _currentPageIndex = newPage;
+                          setState(() {});
+                        },
                         children: [
                           // Container(color: AppColors.grey,),
-                          First(),
+                          const First(),
                           const Second(),
                           Container(
                             color: AppColors.grey,
@@ -226,7 +247,7 @@ class First extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 70.0),
+      padding: const EdgeInsets.only(top: 30.0),
       child: Align(
         alignment: Alignment.topLeft,
         child: Container(
@@ -288,7 +309,7 @@ class Second extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 175.0),
+      padding: const EdgeInsets.only(top: 120.0),
       child: Align(
         alignment: Alignment.topLeft,
         child: Container(
@@ -308,32 +329,93 @@ class Second extends StatelessWidget {
               children: [
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/Vectortext.svg',
+                  icon: 'assets/svg/sticky notes.svg',
                   bottomLine: true,
                 ),
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/Vectorbrush.svg',
+                  icon: 'assets/svg/Highlight.svg',
                   bottomLine: true,
                 ),
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/image.svg',
+                  icon: 'assets/svg/insert.svg',
                   bottomLine: true,
                 ),
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/Draw.svg',
+                  icon: 'assets/svg/Strike.svg',
                   bottomLine: true,
                 ),
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/link.svg',
+                  icon: 'assets/svg/underline.svg',
                   bottomLine: true,
                 ),
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/form field.svg',
+                  icon: 'assets/svg/Shapes.svg',
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+class Third extends StatelessWidget {
+  const Third({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 120.0),
+      child: Align(
+        alignment: Alignment.topLeft,
+        child: Container(
+          width: 75,
+          height: 0.45.sh,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            gradient: const LinearGradient(colors: [
+              AppColors.red1,
+              AppColors.red,
+              AppColors.red1,
+            ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+          ),
+          // padding: const EdgeInsets.symmetric(vertical: 35),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Button(
+                  onTap: () {},
+                  icon: 'assets/svg/sticky notes.svg',
+                  bottomLine: true,
+                ),
+                Button(
+                  onTap: () {},
+                  icon: 'assets/svg/Highlight.svg',
+                  bottomLine: true,
+                ),
+                Button(
+                  onTap: () {},
+                  icon: 'assets/svg/insert.svg',
+                  bottomLine: true,
+                ),
+                Button(
+                  onTap: () {},
+                  icon: 'assets/svg/Strike.svg',
+                  bottomLine: true,
+                ),
+                Button(
+                  onTap: () {},
+                  icon: 'assets/svg/underline.svg',
+                  bottomLine: true,
+                ),
+                Button(
+                  onTap: () {},
+                  icon: 'assets/svg/Shapes.svg',
                 ),
               ],
             ),
