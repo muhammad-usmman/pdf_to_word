@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // height: 0.9.sh,
             child: PageView(
               // pageSnapping: false,
-              // physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               onPageChanged: (newPage) {
                 _currentPageIndex = newPage;
                 setState(() {});
