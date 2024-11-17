@@ -1,7 +1,10 @@
  import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pdf_to_word/controller/cubits/theme_cubit.dart';
 import 'package:pdf_to_word/utils/colors.dart';
+import 'package:pdf_to_word/utils/themes.dart';
 
 class ProFeatures extends StatelessWidget {
   const ProFeatures({super.key});
@@ -13,11 +16,14 @@ class ProFeatures extends StatelessWidget {
       height: 100,
       decoration:  BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        gradient: const LinearGradient(colors: [
+        gradient:   LinearGradient(colors: context.read<ThemeCubit>().state.themeData == AppThemes.light?[
           AppColors.red1,
           AppColors.red,
           AppColors.red1,
-        ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+        ]:[
+          const Color(0xFF303030),
+          const Color(0xFF303030),
+         ], begin: Alignment.centerLeft, end: Alignment.centerRight),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

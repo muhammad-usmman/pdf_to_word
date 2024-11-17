@@ -17,7 +17,7 @@ class ToolCard extends StatelessWidget {
         onTap: onTap,
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          color: Colors.white,
+          // color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

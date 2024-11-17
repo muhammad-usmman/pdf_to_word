@@ -28,7 +28,7 @@ class _ProScreenState extends State<ProScreen> {
           .state
           .themeData == AppThemes.light
           ? const Color(0xffd47474)
-          : Colors.grey, // todo: add colors here
+          : const Color(0xff5a5a5a), // todo: add colors here
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 70),
         child: Stack(
@@ -37,7 +37,7 @@ class _ProScreenState extends State<ProScreen> {
               width: double.infinity,
               height: double.infinity,
               decoration: BoxDecoration(
-                  color: const Color(0xffEEEEEE),
+                  color: context.read<ThemeCubit>().state.themeData == AppThemes.light?const Color(0xffEEEEEE):const Color(0xff1a1a1a),
                   borderRadius: BorderRadius.circular(8)),
               child: SingleChildScrollView(
                 child: Column(
@@ -52,9 +52,9 @@ class _ProScreenState extends State<ProScreen> {
                       "CONVERTER",
                       style: TextStyle(
                           fontSize: 22,
-                          wordSpacing: 4,
+                          wordSpacing: 10,
                           fontWeight: FontWeight.w400,
-                          color: AppColors.grey),
+                          ),
                     ),
                     5.verticalSpace,
                     const Text(
@@ -161,7 +161,7 @@ class _ProScreenState extends State<ProScreen> {
                         '''Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nisi velit, eleifend et dolor ut, egestas pellentesque odio. Sed non fermentum est, id placerat dolor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla aliquam eleifend ante at convallis. Aliquam commodo sodales sem. Cras id consequat orci. Nullam scelerisque diam ornare sagittis vulputate. Nam tincidunt, mauris ac lobortis egestas.''',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Colors.grey,
+                          // color: Colors.grey,
                           fontWeight: FontWeight.w400,
                           fontSize: 18,
                         ),

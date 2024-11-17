@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pdf_to_word/controller/cubits/theme_cubit.dart';
 import 'package:pdf_to_word/utils/colors.dart';
+import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/view/screens/pdf_editor/widgets/button.dart';
 
 class PDFEditor extends StatefulWidget {
@@ -14,6 +19,19 @@ class PDFEditor extends StatefulWidget {
 class _PDFEditorState extends State<PDFEditor> {
   PageController pageController = PageController();
   int _currentPageIndex = 0;
+  double sliderValue = 50; // Initial slider value
+
+  void _increment() {
+    setState(() {
+      sliderValue = (sliderValue + 10).clamp(0, 100);
+    });
+  }
+
+  void _decrement() {
+    setState(() {
+      sliderValue = (sliderValue - 10).clamp(0, 100);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +40,8 @@ class _PDFEditorState extends State<PDFEditor> {
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("PDF TO WORD", style: TextStyle(fontSize: 18, color: Colors.black)),
-            Text("CONVERTER", style: TextStyle(fontSize: 12, color: Colors.grey)),
+            Text("PDF TO WORD", style: TextStyle(fontSize: 18, )),
+            Text("CONVERTER", style: TextStyle(fontSize: 12, )),
           ],
         ),
         actions: [
@@ -60,15 +78,13 @@ class _PDFEditorState extends State<PDFEditor> {
           ),
           5.horizontalSpace,
         ],
-        backgroundColor: Colors.white,
-        elevation: 0,
+         elevation: 0,
       ),
-      backgroundColor: Colors.white,
-      body: Column(
+       body: Column(
         children: [
           Container(
             height: 100,
-            color: const Color(0xFFE8E8E8),
+            color:   context.read<ThemeCubit>().state.themeData == AppThemes.light? const Color(0xFFE8E8E8):const Color(0xff242424),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -107,9 +123,9 @@ class _PDFEditorState extends State<PDFEditor> {
           ),
           Expanded(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration:   BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/svg/BG.png'),
+                  image: AssetImage(context.read<ThemeCubit>().state.themeData == AppThemes.light?'assets/svg/BG.png':'assets/svg/black bg.png'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -133,7 +149,7 @@ class _PDFEditorState extends State<PDFEditor> {
                           ),
                         ],
                         borderRadius: BorderRadius.circular(12),
-                        color: Colors.white,
+                        color: context.read<ThemeCubit>().state.themeData == AppThemes.light?Colors.white:Colors.black,
                       ),
                     ),
                   ),
@@ -143,13 +159,16 @@ class _PDFEditorState extends State<PDFEditor> {
                     left: 0,
                     child: Container(
                       width: 125,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
+                      decoration:   BoxDecoration(
+                        borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(8), bottomRight: Radius.circular(8)),
-                        gradient: LinearGradient(colors: [
+                        gradient:   LinearGradient(colors: context.read<ThemeCubit>().state.themeData == AppThemes.light?[
                           AppColors.red1,
                           AppColors.red,
                           AppColors.red1,
+                        ]:[
+                          const Color(0xFF303030),
+                          const Color(0xFF303030),
                         ], begin: Alignment.centerLeft, end: Alignment.centerRight),
                       ),
                       // padding: const EdgeInsets.symmetric(vertical: 35),
@@ -159,35 +178,31 @@ class _PDFEditorState extends State<PDFEditor> {
                             Button(
                                 onTap: () {
                                   pageController.jumpToPage(0);
-                                  print(_currentPageIndex);
+                                  log(_currentPageIndex.toString());
                                 },
                                 icon: 'assets/svg/ICON.svg'),
                             Button(
                                 onTap: () {
                                   pageController.jumpToPage(1);
-                                  print(_currentPageIndex);
-
+                                  log(_currentPageIndex.toString());
                                 },
                                 icon: 'assets/svg/Add text.svg'),
                             Button(
                                 onTap: () {
                                   pageController.jumpToPage(2);
-                                  print(_currentPageIndex);
-
+                                  log(_currentPageIndex.toString());
                                 },
                                 icon: 'assets/svg/Icon3.svg'),
                             Button(
                                 onTap: () {
                                   pageController.jumpToPage(3);
-                                  print(_currentPageIndex);
-
+                                  log(_currentPageIndex.toString());
                                 },
                                 icon: 'assets/svg/Number.svg'),
                             Button(
                                 onTap: () {
                                   pageController.jumpToPage(4);
-                                  print(_currentPageIndex);
-
+                                  log(_currentPageIndex.toString());
                                 },
                                 icon: 'assets/svg/page bookmark.svg'),
                             const Padding(
@@ -220,13 +235,148 @@ class _PDFEditorState extends State<PDFEditor> {
                           _currentPageIndex = newPage;
                           setState(() {});
                         },
-                        children: [
+                        children: const [
                           // Container(color: AppColors.grey,),
-                          const First(),
-                          const Second(),
+                          First(),
+                          Second(),
+                          Third(),
+                          Fourth(),
+                          Bookmarks()
+                        ],
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 95,
+                    bottom: 94,
+                    right: 0,
+                    child: Container(
+                      width: 120,
+                      decoration: const BoxDecoration(
+                        color: Colors.white24,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomLeft: Radius.circular(8),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
                           Container(
-                            color: AppColors.grey,
+                            width: 59,
+                            height: 59,
+                            color: Colors.white12,
+                            child: const Center(
+                                child: Text(
+                              '1',
+                              style: TextStyle(
+                                  color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
+                            )),
                           ),
+                          const Text(
+                            '6',
+                            style: TextStyle(
+                                color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20),
+                          ),
+                          Container(
+                            width: 59,
+                            height: 59,
+                            color: Colors.white12,
+                            child: const Center(
+                              child: Icon(
+                                Icons.keyboard_arrow_up_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 59,
+                            height: 59,
+                            color: Colors.white12,
+                            child: const Center(
+                              child: Icon(
+                                Icons.keyboard_arrow_down_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 40),
+                            child: Divider(
+                              height: 1.5,
+                              thickness: 1.5,
+                              color: Colors.white70,
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                style: const ButtonStyle(
+                                    backgroundColor: WidgetStatePropertyAll(Colors.white),
+                                    padding: WidgetStatePropertyAll(EdgeInsets.zero)),
+                                icon: const Icon(Icons.add),
+                                onPressed: _increment,
+                                color: Colors.black,
+                                padding: EdgeInsets.zero,
+                                // Remove default padding
+                                constraints: const BoxConstraints(), // Remove default constraints
+                              ),
+                              RotatedBox(
+                                quarterTurns: 3,
+                                child: SliderTheme(
+                                  data: SliderTheme.of(context).copyWith(
+                                    trackHeight: 2,
+                                    thumbColor: Colors.white,
+                                    activeTrackColor: Colors.white,
+                                    inactiveTrackColor: Colors.white54,
+                                    thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
+                                  ),
+                                  child: Slider(
+                                    value: sliderValue,
+                                    min: 0,
+                                    max: 100,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        sliderValue = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.remove),
+                                onPressed: _decrement,
+                                color: Colors.black,
+                                padding: EdgeInsets.zero,
+                                // Remove default padding
+                                constraints: const BoxConstraints(),
+                                // Remove default constraints
+                                style: const ButtonStyle(
+                                    backgroundColor: WidgetStatePropertyAll(Colors.white),
+                                    padding: WidgetStatePropertyAll(EdgeInsets.zero)),
+                              ),
+                              20.verticalSpace,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    '${sliderValue.toStringAsFixed(0)}%',
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20),
+                                  ),
+                                  5.horizontalSpace,
+                                  const Icon(
+                                    Icons.keyboard_arrow_down_outlined,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),
@@ -255,11 +405,14 @@ class First extends StatelessWidget {
           height: 0.45.sh,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            gradient: const LinearGradient(colors: [
-              AppColors.red1,
-              AppColors.red,
-              AppColors.red1,
-            ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+          gradient:   LinearGradient(colors: context.read<ThemeCubit>().state.themeData == AppThemes.light?[
+            AppColors.red1,
+            AppColors.red,
+            AppColors.red1,
+          ]:[
+            const Color(0xFF303030),
+            const Color(0xFF303030),
+          ], begin: Alignment.centerLeft, end: Alignment.centerRight),
           ),
           // padding: const EdgeInsets.symmetric(vertical: 35),
           child: SingleChildScrollView(
@@ -317,10 +470,13 @@ class Second extends StatelessWidget {
           height: 0.45.sh,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            gradient: const LinearGradient(colors: [
+            gradient:   LinearGradient(colors: context.read<ThemeCubit>().state.themeData == AppThemes.light?[
               AppColors.red1,
               AppColors.red,
               AppColors.red1,
+            ]:[
+              const Color(0xFF303030),
+              const Color(0xFF303030),
             ], begin: Alignment.centerLeft, end: Alignment.centerRight),
           ),
           // padding: const EdgeInsets.symmetric(vertical: 35),
@@ -364,13 +520,14 @@ class Second extends StatelessWidget {
     );
   }
 }
+
 class Third extends StatelessWidget {
   const Third({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 120.0),
+      padding: const EdgeInsets.only(top: 210.0),
       child: Align(
         alignment: Alignment.topLeft,
         child: Container(
@@ -378,10 +535,13 @@ class Third extends StatelessWidget {
           height: 0.45.sh,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            gradient: const LinearGradient(colors: [
+            gradient:   LinearGradient(colors: context.read<ThemeCubit>().state.themeData == AppThemes.light?[
               AppColors.red1,
               AppColors.red,
               AppColors.red1,
+            ]:[
+              const Color(0xFF303030),
+              const Color(0xFF303030),
             ], begin: Alignment.centerLeft, end: Alignment.centerRight),
           ),
           // padding: const EdgeInsets.symmetric(vertical: 35),
@@ -390,37 +550,216 @@ class Third extends StatelessWidget {
               children: [
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/sticky notes.svg',
+                  icon: 'assets/svg/MOVE.svg',
                   bottomLine: true,
                 ),
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/Highlight.svg',
+                  icon: 'assets/svg/Delete.svg',
                   bottomLine: true,
                 ),
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/insert.svg',
+                  icon: 'assets/svg/left rotate.svg',
                   bottomLine: true,
                 ),
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/Strike.svg',
+                  icon: 'assets/svg/right rotate.svg',
                   bottomLine: true,
                 ),
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/underline.svg',
+                  icon: 'assets/svg/Append text.svg',
                   bottomLine: true,
                 ),
                 Button(
                   onTap: () {},
-                  icon: 'assets/svg/Shapes.svg',
+                  icon: 'assets/svg/CROP.svg',
                 ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+class Fourth extends StatefulWidget {
+  const Fourth({super.key});
+
+  @override
+  State<Fourth> createState() => _FourthState();
+}
+
+class _FourthState extends State<Fourth> {
+  final ScrollController _scrollController = ScrollController();
+int currentIndex=0;
+  @override
+  Widget build(BuildContext context) {
+    return  Align(
+      alignment: Alignment.topLeft,
+      child: Container(
+        // color: Colors.orange,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        width: 0.15.sw,
+         child: Scrollbar(
+           controller: _scrollController,
+           thumbVisibility: true,
+           thickness: 1.5,
+           radius: const Radius.circular(10),
+           trackVisibility: true,
+             interactive: true,
+             // trackColor: WidgetStatePropertyAll(Colors.red.shade100),
+           // thumbColor: WidgetStatePropertyAll(Colors.red),
+           child: ListView.builder(
+             controller: _scrollController,
+            itemCount: 10,
+              itemBuilder: (context, index) {
+              return Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                        InkWell(
+                          onTap: (){
+                            setState(() {
+                              currentIndex = index;
+
+                            });
+                          },
+                          child: Container(
+                          width: 200,
+                          height: 300,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+
+                            border: currentIndex == index?Border.all(color: Colors.red, width: 2):null,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.25),
+                                // Shadow color with transparency
+                                blurRadius: 1,
+                                // Softens the shadow
+                                spreadRadius: 1,
+                                // Extends the shadow slightly
+                                offset: const Offset(
+                                    0, 0), // Position of the shadow (horizontal, vertical)
+                              ),
+                            ],
+
+                          ),
+                          child: Center(child: Text('Page ${index + 1}')),
+                                                ),
+                        ),
+                      // Page number
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text('${index + 1}'),
+                      ),
+                    ],
+                  ),
+                  if(currentIndex == index)
+                  Positioned(
+                    right: 15,
+                    top: 10,
+                    child: Container(
+                      width: 52,
+           
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        gradient:   LinearGradient(colors: context.read<ThemeCubit>().state.themeData == AppThemes.light?[
+                          AppColors.red1,
+                          AppColors.red,
+                          AppColors.red1,
+                        ]:[
+                          const Color(0xFF303030),
+                          const Color(0xFF303030),
+                        ], begin: Alignment.centerLeft, end: Alignment.centerRight),
+                      ),
+                      child: Column(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.white),
+                            onPressed: () {
+                              // Delete action
+                            },
+                            color: Colors.red,
+                            padding: const EdgeInsets.all(4),
+                            iconSize: 20,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.refresh, color: Colors.white),
+                            onPressed: () {
+                              // Refresh action
+                            },
+                            color: Colors.red,
+                            padding: const EdgeInsets.all(4),
+                            iconSize: 20,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.rotate_left, color: Colors.white),
+                            onPressed: () {
+                              // Rotate action
+                            },
+                            color: Colors.red,
+                            padding: const EdgeInsets.all(4),
+                            iconSize: 20,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+                   ),
+         ),
+      ),
+    );
+  }
+}
+
+
+class Bookmarks extends StatelessWidget {
+  const Bookmarks({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.grey.shade200, // Background color similar to the image
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: EdgeInsets.only(left: 16, top: 16),
+              child: Text(
+                "Bookmarks",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+          const Spacer(), // Pushes the icon and text to the center
+          SvgPicture.asset('assets/svg/Add Bookmark.svg'),
+          const SizedBox(height: 10),
+          const Text(
+            "No Bookmarks Found",
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
+            ),
+          ),
+          const Spacer(), // Adds space below the content
+        ],
       ),
     );
   }
