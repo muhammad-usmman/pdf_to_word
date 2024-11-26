@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 22.0,
               disabledOpacity: 1.0,
               activeColor: AppColors.red,
-              inactiveColor: Colors.white54,
+              // inactiveColor: Colors.white54,
               controller: whiteTheme,
               borderRadius: BorderRadius.circular(50.0),
               thumb: Center(

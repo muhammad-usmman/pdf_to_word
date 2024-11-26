@@ -1,16 +1,30 @@
+import 'package:desktop_drop/desktop_drop.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:pdf_to_word/controller/cubits/theme_cubit.dart';
 import 'package:pdf_to_word/utils/colors.dart';
+import 'package:pdf_to_word/utils/repositories/to_pdf_conversions_repos/to_pdf_repo.dart';
+import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/view/shared/custom_button.dart';
-import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 
-class DragDropDialog extends StatelessWidget {
+class DragDropDialog extends StatefulWidget {
   const DragDropDialog({super.key});
 
   @override
+  State<DragDropDialog> createState() => _DragDropDialogState();
+}
+
+class _DragDropDialogState extends State<DragDropDialog> {
+  @override
   Widget build(BuildContext context) {
+    // late DropzoneViewController controller1;
+
+    String? filePath;
+    bool highlighted1 = false;
+
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
       backgroundColor: Colors.transparent,
@@ -27,8 +41,13 @@ class DragDropDialog extends StatelessWidget {
                 width: 0.8.sw,
                 height: 0.6.sh,
                 decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/dragnDropBg.png'),
+                  color: context.read<ThemeCubit>().state.themeData == AppThemes.light
+                      ? Colors.transparent
+                      : Colors.black,
+                  image: DecorationImage(
+                    image: AssetImage(context.read<ThemeCubit>().state.themeData == AppThemes.light
+                        ? 'assets/svg/BG.png'
+                        : 'assets/svg/black bg.png'),
                     filterQuality: FilterQuality.high,
                     fit: BoxFit.fill,
                   ),
@@ -65,128 +84,96 @@ class DragDropDialog extends StatelessWidget {
                             // Softens the shadow
                             spreadRadius: 1,
                             // Extends the shadow slightly
-                            offset: const Offset(0,
-                                4), // Position of the shadow (horizontal, vertical)
+                            offset:
+                                const Offset(0, 4), // Position of the shadow (horizontal, vertical)
                           ),
                         ],
-                        color: Colors.white.withOpacity(0.8),
+                        color: context.read<ThemeCubit>().state.themeData == AppThemes.light
+                            ? Colors.white.withOpacity(0.8)
+                            : Colors.black.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: DropRegion(
-                        // Formats this region can accept.
-                        formats: const [Formats.png,Formats.jpeg,],
-                        hitTestBehavior: HitTestBehavior.opaque,
-                        onDropOver: (event) {
-                          // You can inspect local data here, as well as formats of each item.
-                          // However on certain platforms (mobile / web) the actual data is
-                          // only available when the drop is accepted (onPerformDrop).
-                          final item = event.session.items.first;
-                          if (item.localData is Map) {
-                            // This is a drag within the app and has custom local data set.
-                          }
-                          if (item.canProvide(Formats.plainText)) {
-                            // this item contains plain text.
-                          }
-                          // This drop region only supports copy operation.
-                          if (event.session.allowedOperations.contains(DropOperation.copy)) {
-                            return DropOperation.copy;
-                          } else {
-                            return DropOperation.none;
-                          }
-                        },
-                        onDropEnter: (event) {
-                          // This is called when region first accepts a drag. You can use this
-                          // to display a visual indicator that the drop is allowed.
-                        },
-                        onDropLeave: (event) {
-                          // Called when drag leaves the region. Will also be called after
-                          // drag completion.
-                          // This is a good place to remove any visual indicators.
-                        },
-                        onPerformDrop: (event) async {
-                          // Called when user dropped the item. You can now request the data.
-                          // Note that data must be requested before the performDrop callback
-                          // is over.
-                          final item = event.session.items.first;
+                      child: Stack(
+                        children: [
+                          DropTarget(
+                            onDragDone: (detail) {
+                              print(detail.files.first.path);
+                              ToPdfConversionRepo().convertDocxToPdf(detail.files.first.path.toString(), 'C:/Users/Usman/Downloads');
+                              setState(() {
+                                // _list.addAll(detail.files);
+                              });
+                            },
+                            onDragEntered: (detail) {
+                              print(detail.globalPosition);
 
-                          // data reader is available now
-                          final reader = item.dataReader!;
-                          if (reader.canProvide(Formats.plainText)) {
-                            reader.getValue<String>(Formats.plainText, (value) {
-                              if (value != null) {
-                                // You can access values through the `value` property.
-                                print('Dropped text: ${value}');
-                              }
-                            }, onError: (error) {
-                              print('Error reading value $error');
-                            });
-                          }
+                              setState(() {
+                                // _dragging = true;
+                              });
+                            },
+                            onDragExited: (detail) {
+                              print(detail.localPosition);
 
-                          if (reader.canProvide(Formats.png)) {
-                            reader.getFile(Formats.png, (file) {
-                              // Binary files may be too large to be loaded in memory and thus
-                              // are exposed as stream.
-                              final stream = file.getStream();
-
-                              // Alternatively, if you know that that the value is small enough,
-                              // you can read the entire value into memory:
-                              // (note that readAll is mutually exclusive with getStream(), you
-                              // can only use one of them)
-                              // final data = file.readAll();
-                            }, onError: (error) {
-                              print('Error reading value $error');
-                            });
-                          }
-                        },
-                        child: DottedBorder(
-                          dashPattern: const [8, 8],
-                          radius: const Radius.circular(8),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // Placeholder for an upload icon/image
-                                SvgPicture.asset('assets/svg/Upload.svg'),
-                                const SizedBox(height: 16),
-                                const Text(
-                                  "Drag & Drop File Here",
-                                  style: TextStyle(color: Colors.black,fontWeight: FontWeight.w600,fontSize: 24),
-                                ),
-                                Row(
+                              setState(() {
+                                // _dragging = false;
+                              });
+                            },
+                            child: DottedBorder(
+                              color: context.read<ThemeCubit>().state.themeData == AppThemes.light
+                                  ? Colors.black
+                                  : AppColors.red,
+                              dashPattern: const [8, 8],
+                              radius: const Radius.circular(8),
+                              child: Center(
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                                      height: 0.8,
-                                      width: 100,// Height of the divider line
-                                      color: AppColors.grey,    // Color of the divider
+                                    // Placeholder for an upload icon/image
+                                    SvgPicture.asset('assets/svg/Upload.svg'),
+                                    const SizedBox(height: 16),
+                                    const Text(
+                                      "Drag & Drop File Here",
+                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
                                     ),
-                                    Text(
-                                      "OR",
-                                      style: TextStyle(color: Colors.grey.shade400,fontWeight: FontWeight.w600,fontSize: 26),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                                          height: 0.8,
+                                          width: 100, // Height of the divider line
+                                          color: AppColors.grey, // Color of the divider
+                                        ),
+                                        Text(
+                                          "OR",
+                                          style: TextStyle(
+                                              color: Colors.grey.shade400,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 26),
+                                        ),
+                                        Container(
+                                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                                          height: 0.8,
+                                          width: 100, // Height of the divider line
+                                          color: AppColors.grey, // Color of the divider
+                                        ),
+                                      ],
                                     ),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 10),
-                                      height: 0.8,
-                                      width: 100,// Height of the divider line
-                                      color: AppColors.grey,    // Color of the divider
+                                    const SizedBox(height: 8),
+                                    CustomButton(
+                                      onTap: () {
+                                        // Add your file browsing logic here
+                                      },
+                                      title: "Browse Files",
+                                      height: 0.07.sh,
+                                      width: 0.2.sw,
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 8),
-                                CustomButton(
-                                  onTap: () {
-                                    // Add your file browsing logic here
-                                  },
-                                  title: "Browse Files",
-                                  height: 0.07.sh,
-                                  width: 0.2.sw,
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
+                          )
+                        ],
                       ),
                     ),
                     const Spacer(),
