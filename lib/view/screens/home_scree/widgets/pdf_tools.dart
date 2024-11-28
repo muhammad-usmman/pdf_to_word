@@ -38,7 +38,7 @@ class PDFTools extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(),
+                      builder: (BuildContext context) => const DragDropDialog(fileTypeExtension: ['pdf'],),
                     );
                   },
                 ),

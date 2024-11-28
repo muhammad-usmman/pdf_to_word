@@ -23,7 +23,18 @@ class Home extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(),
+                      builder: (BuildContext context) => const DragDropDialog(
+                        fileTypeExtension: [
+                          'jpg',
+                          'jpeg',
+                          'gif',
+                          'tiff',
+                          'webp',
+                          'heic',
+                          'svg',
+                          'psd'
+                        ],
+                      ),
                     );
                   },
                 ),

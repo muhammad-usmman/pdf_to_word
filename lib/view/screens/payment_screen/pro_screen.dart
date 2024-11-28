@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:pdf_to_word/controller/cubits/theme_cubit.dart';
+import 'package:pdf_to_word/controller/cubits/theme_Cubit/theme_cubit.dart';
 import 'package:pdf_to_word/utils/colors.dart';
 import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/view/screens/home_scree/home_screen_root.dart';

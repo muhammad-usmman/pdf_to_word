@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_drop_dialog.dart';
 import 'package:pdf_to_word/view/shared/tool_card.dart';
@@ -23,7 +24,7 @@ class ConvertFromPdf extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(),
+                      builder: (BuildContext context) => const DragDropDialog(fileTypeExtension:['pdf'],),
                     );
                   },
                 ),

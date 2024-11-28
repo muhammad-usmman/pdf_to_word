@@ -1,7 +1,5 @@
-// theme_cubit.dart
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:pdf_to_word/utils/prefrences/user_prefs.dart';
+ import 'package:flutter_bloc/flutter_bloc.dart';
+ import 'package:pdf_to_word/utils/prefrences/user_prefs.dart';
 import 'package:pdf_to_word/utils/themes.dart';
 import 'theme_state.dart';
 

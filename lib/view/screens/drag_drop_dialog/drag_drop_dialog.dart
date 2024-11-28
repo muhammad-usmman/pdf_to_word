@@ -1,30 +1,32 @@
+import 'dart:developer';
+
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pdf_to_word/controller/cubits/theme_cubit.dart';
+import 'package:pdf_to_word/controller/cubits/file_picker_cubit/file_picker_cubit.dart';
+import 'package:pdf_to_word/controller/cubits/theme_Cubit/theme_cubit.dart';
 import 'package:pdf_to_word/utils/colors.dart';
-import 'package:pdf_to_word/utils/repositories/to_pdf_conversions_repos/to_pdf_repo.dart';
 import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/view/shared/custom_button.dart';
 
 class DragDropDialog extends StatefulWidget {
-  const DragDropDialog({super.key});
+  final List<String> fileTypeExtension;
+
+  const DragDropDialog({super.key, required this.fileTypeExtension});
 
   @override
   State<DragDropDialog> createState() => _DragDropDialogState();
 }
 
 class _DragDropDialogState extends State<DragDropDialog> {
+  bool _dragging = false;
+  String selectedFile = 'Drag & Drop File Here';
+
   @override
   Widget build(BuildContext context) {
-    // late DropzoneViewController controller1;
-
-    String? filePath;
-    bool highlighted1 = false;
-
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
       backgroundColor: Colors.transparent,
@@ -88,92 +90,94 @@ class _DragDropDialogState extends State<DragDropDialog> {
                                 const Offset(0, 4), // Position of the shadow (horizontal, vertical)
                           ),
                         ],
-                        color: context.read<ThemeCubit>().state.themeData == AppThemes.light
-                            ? Colors.white.withOpacity(0.8)
-                            : Colors.black.withOpacity(0.5),
+                        color: _dragging
+                            ? AppColors.red.withOpacity(0.5)
+                            : context.read<ThemeCubit>().state.themeData == AppThemes.light
+                                ? Colors.white.withOpacity(0.8)
+                                : Colors.black.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Stack(
-                        children: [
-                          DropTarget(
-                            onDragDone: (detail) {
-                              print(detail.files.first.path);
-                              ToPdfConversionRepo().convertDocxToPdf(detail.files.first.path.toString(), 'C:/Users/Usman/Downloads');
-                              setState(() {
-                                // _list.addAll(detail.files);
-                              });
-                            },
-                            onDragEntered: (detail) {
-                              print(detail.globalPosition);
+                      child: DropTarget(
+                        onDragDone: (detail) {
+                          // #todo: remove this call from here and think of something to make it wokrk like dynamic probably a callback
+                          log(detail.files.first.path);
+                          selectedFile = detail.files.first.name;
+                          // ToPdfConversionRepo().convertDocxToPdf(
+                          //     detail.files.first.path.toString(), 'C:/Users/Usman/Downloads');
+                          setState(() {
+                            // _list.addAll(detail.files);
+                          });
+                        },
+                        onDragEntered: (detail) {
+                          log(detail.globalPosition.toString());
 
-                              setState(() {
-                                // _dragging = true;
-                              });
-                            },
-                            onDragExited: (detail) {
-                              print(detail.localPosition);
+                          setState(() {
+                            _dragging = true;
+                          });
+                        },
+                        onDragExited: (detail) {
+                          log(detail.localPosition.toString());
 
-                              setState(() {
-                                // _dragging = false;
-                              });
-                            },
-                            child: DottedBorder(
-                              color: context.read<ThemeCubit>().state.themeData == AppThemes.light
-                                  ? Colors.black
-                                  : AppColors.red,
-                              dashPattern: const [8, 8],
-                              radius: const Radius.circular(8),
-                              child: Center(
-                                child: Column(
+                          setState(() {
+                            _dragging = false;
+                          });
+                        },
+                        child: DottedBorder(
+                          color: context.read<ThemeCubit>().state.themeData == AppThemes.light
+                              ? Colors.black
+                              : AppColors.red,
+                          dashPattern: const [8, 8],
+                          radius: const Radius.circular(8),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                 SvgPicture.asset('assets/svg/Upload.svg'),
+                                const SizedBox(height: 16),
+                                Text(
+                                  selectedFile,
+                                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+                                ),
+                                Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    // Placeholder for an upload icon/image
-                                    SvgPicture.asset('assets/svg/Upload.svg'),
-                                    const SizedBox(height: 16),
-                                    const Text(
-                                      "Drag & Drop File Here",
-                                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                                      height: 0.8,
+                                      width: 100,
+                                      color: AppColors.grey,
                                     ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                                          height: 0.8,
-                                          width: 100, // Height of the divider line
-                                          color: AppColors.grey, // Color of the divider
-                                        ),
-                                        Text(
-                                          "OR",
-                                          style: TextStyle(
-                                              color: Colors.grey.shade400,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 26),
-                                        ),
-                                        Container(
-                                          margin: const EdgeInsets.symmetric(horizontal: 10),
-                                          height: 0.8,
-                                          width: 100, // Height of the divider line
-                                          color: AppColors.grey, // Color of the divider
-                                        ),
-                                      ],
+                                    Text(
+                                      "OR",
+                                      style: TextStyle(
+                                          color: Colors.grey.shade400,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 26),
                                     ),
-                                    const SizedBox(height: 8),
-                                    CustomButton(
-                                      onTap: () {
-                                        // Add your file browsing logic here
-                                      },
-                                      title: "Browse Files",
-                                      height: 0.07.sh,
-                                      width: 0.2.sw,
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 10),
+                                      height: 0.8,
+                                      width: 100,
+                                      color: AppColors.grey,
                                     ),
                                   ],
                                 ),
-                              ),
+                                const SizedBox(height: 8),
+                                CustomButton(
+                                  onTap: () {
+                                    context
+                                        .read<FilePickerCubit>()
+                                        .pickFile(widget.fileTypeExtension);
+                                  },
+                                  title: "Browse Files",
+                                  height: 0.07.sh,
+                                  width: 0.2.sw,
+                                ),
+                              ],
                             ),
-                          )
-                        ],
+                          ),
+                        ),
                       ),
                     ),
                     const Spacer(),
