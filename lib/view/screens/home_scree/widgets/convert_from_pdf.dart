@@ -20,7 +20,7 @@ class ConvertFromPdf extends StatelessWidget {
               children: [
                 ToolCard(
                   label: 'PDF to Word',
-                  svg: 'assets/svg/PDF to HTML.svg',
+                  svg: 'assets/svg/PDF to Word.svg',
                   onTap: () {
                     showDialog(
                       context: context,
@@ -31,17 +31,32 @@ class ConvertFromPdf extends StatelessWidget {
                 ToolCard(
                   label: 'PDF to JPG',
                   svg: 'assets/svg/PDF to Image.svg',
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => const DragDropDialog(fileTypeExtension:['pdf'],),
+                    );
+                  },
                 ),
                 ToolCard(
                   label: 'PDF to Text',
                   svg: 'assets/svg/PDF to Text.svg',
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => const DragDropDialog(fileTypeExtension:['pdf'],),
+                    );
+                  },
                 ),
                 ToolCard(
                   label: 'PDF to HTML',
-                  svg: 'assets/svg/PDF to Word.svg',
-                  onTap: () {},
+                  svg: 'assets/svg/PDF to HTML.svg',
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => const DragDropDialog(fileTypeExtension:['pdf'],),
+                    );
+                  },
                 ),
 
               ],

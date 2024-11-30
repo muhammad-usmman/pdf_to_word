@@ -19,35 +19,75 @@ class ConvertToPdf extends StatelessWidget {
               children: [
                 ToolCard(
                   label: 'Word to PDF',
-                  svg: 'assets/svg/JPG to PDF.svg',
+                  svg: 'assets/svg/Word to PDF.svg',
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(fileTypeExtension: ['doc','docx'],),
+                      builder: (BuildContext context) => const DragDropDialog(
+                        fileTypeExtension: ['doc', 'docx'],
+                      ),
                     );
                   },
                 ),
                 ToolCard(
                   label: 'Image to PDF',
                   svg: 'assets/svg/JPG to PDF (1).svg',
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => const DragDropDialog(
+                        fileTypeExtension: [
+                          'jpg',
+                          'jpeg',
+                          'gif',
+                          'tiff',
+                          'webp',
+                          'heic',
+                          'svg',
+                          'psd'
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 ToolCard(
                   label: 'PPT to PDF',
                   svg: 'assets/svg/PPT to PDF.svg',
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => const DragDropDialog(
+                        fileTypeExtension: ['ppt', 'pptx'],
+                      ),
+                    );
+                  },
                 ),
                 ToolCard(
                   label: 'BMP to PDF',
                   svg: 'assets/svg/BMP to PDF.svg',
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => const DragDropDialog(
+                        fileTypeExtension: [
+                          'bmp',
+                        ],
+                      ),
+                    );
+                  },
                 ),
                 ToolCard(
-                  label: 'assets/svg/Word to PDF.svg',
+                  label: 'Excel to PDF',
                   svg: 'assets/svg/Excel to PDF.svg',
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => const DragDropDialog(
+                        fileTypeExtension: ['xls', 'xlsx'],
+                      ),
+                    );
+                  },
                 ),
-
               ],
             ),
           ),
