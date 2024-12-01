@@ -9,8 +9,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pdf_to_word/controller/cubits/file_picker_cubit/file_picker_cubit.dart';
 import 'package:pdf_to_word/controller/cubits/theme_Cubit/theme_cubit.dart';
 import 'package:pdf_to_word/utils/colors.dart';
-import 'package:pdf_to_word/utils/repositories/to_pdf_conversions_repos/to_pdf_repo.dart';
-import 'package:pdf_to_word/utils/themes.dart';
+import 'package:pdf_to_word/utils/repositories/to_pdf_conversions_repo/to_pdf_repo.dart';
+ import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/view/screens/dowload_convert_file/download_convert_url.dart';
 import 'package:pdf_to_word/view/shared/custom_button.dart';
 
@@ -105,12 +105,12 @@ class _DragDropDialogState extends State<DragDropDialog> {
                           log(detail.files.first.path);
                           selectedFile = detail.files.first.name;
                           var result = await ToPdfConversionRepo().convertDocxToPdf(
-                              detail.files.first.path.toString(), 'C:/Users/Usman/Downloads');
+                              detail.files.first.path.toString(), );
                           Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      const DownloadConvertedFile(fileUrl: '', fileName: '',)));
+                                        DownloadConvertedFile(fileUrl: result['fileUrl']!, fileName: result['fileName']!,)));
                           setState(() {
                             // _list.addAll(detail.files);
                           });
