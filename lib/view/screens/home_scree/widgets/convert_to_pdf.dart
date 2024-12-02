@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pdf_to_word/controller/cubits/conversion_cubit/conversion_cubit.dart';
 import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_drop_dialog.dart';
 import 'package:pdf_to_word/view/shared/tool_card.dart';
 
@@ -23,8 +25,12 @@ class ConvertToPdf extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(
-                        fileTypeExtension: ['doc', 'docx'],
+                      builder: (BuildContext context) => DragDropDialog(
+                        fileTypeExtension: const ['doc', 'docx'],
+                        callBack:(String filePath) {
+                          context.read<ConversionCubit>().convertDocxToPdf(filePath);
+                        },
+                        title: 'Word to Pdf',
                       ),
                     );
                   },
@@ -35,9 +41,10 @@ class ConvertToPdf extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(
-                        fileTypeExtension: [
+                      builder: (BuildContext context) => DragDropDialog(
+                        fileTypeExtension: const [
                           'jpg',
+                          'png',
                           'jpeg',
                           'gif',
                           'tiff',
@@ -46,6 +53,10 @@ class ConvertToPdf extends StatelessWidget {
                           'svg',
                           'psd'
                         ],
+                        callBack: (String filePath) {
+                          context.read<ConversionCubit>().convertImagesToPdf(filePath);
+                        },
+                        title: 'Image to Pdf',
                       ),
                     );
                   },
@@ -56,8 +67,12 @@ class ConvertToPdf extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(
-                        fileTypeExtension: ['ppt', 'pptx'],
+                      builder: (BuildContext context) => DragDropDialog(
+                        fileTypeExtension: const ['ppt', 'pptx'],
+                        callBack:(String filePath) {
+                          context.read<ConversionCubit>().convertPptToPdf(filePath);
+                        },
+                        title: 'Ppt to Pdf',
                       ),
                     );
                   },
@@ -68,10 +83,14 @@ class ConvertToPdf extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(
-                        fileTypeExtension: [
+                      builder: (BuildContext context) => DragDropDialog(
+                        fileTypeExtension: const [
                           'bmp',
                         ],
+                        callBack:(String filePath) {
+                          context.read<ConversionCubit>().convertBmpToPdf(filePath);
+                        },
+                        title: 'Bmp to Pdf',
                       ),
                     );
                   },
@@ -82,8 +101,12 @@ class ConvertToPdf extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(
-                        fileTypeExtension: ['xls', 'xlsx'],
+                      builder: (BuildContext context) => DragDropDialog(
+                        fileTypeExtension: const ['xls', 'xlsx'],
+                        callBack:(String filePath) {
+                          context.read<ConversionCubit>().convertXlsToPdf(filePath);
+                        },
+                        title: 'Excel to Pdf',
                       ),
                     );
                   },

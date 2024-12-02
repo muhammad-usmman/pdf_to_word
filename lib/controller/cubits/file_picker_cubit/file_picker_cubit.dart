@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:meta/meta.dart';
@@ -11,21 +9,27 @@ class FilePickerCubit extends Cubit<FilePickerState> {
 
   Future<void> pickFile(List<String> fileTypeExtension) async {
     try {
+      emit(FilePickerInitial());
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: fileTypeExtension,
         allowMultiple: false,
       );
+      emit(FilePickerLoading());
 
       if (result != null && result.files.isNotEmpty) {
         final filePath = result.files.first.path;
-        log('Selected file path: $filePath');
+        final fileName = result.files.first.name;
+        if (filePath != null) {
+          emit(FilePickerLoaded(fileName: fileName, finalUrl: filePath));
+        } else {
+          emit(FilePickerError(error: 'Error Picking File'));
+        }
       } else {
-        log('No file selected');
+        emit(FilePickerError(error: 'No file selected'));
       }
     } catch (e) {
-      log('Error while picking file: $e');
+      emit(FilePickerError(error: 'Error while picking file: $e'));
     }
   }
 }
-

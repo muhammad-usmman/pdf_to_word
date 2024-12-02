@@ -1,6 +1,7 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_drop_dialog.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pdf_to_word/controller/cubits/conversion_cubit/conversion_cubit.dart';
+ import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_drop_dialog.dart';
 import 'package:pdf_to_word/view/shared/tool_card.dart';
 
 class ConvertFromPdf extends StatelessWidget {
@@ -24,7 +25,13 @@ class ConvertFromPdf extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(fileTypeExtension:['pdf'],),
+                      builder: (BuildContext context) => DragDropDialog(
+                        fileTypeExtension: const ['pdf'],
+                        callBack: (String filePath) {
+                          context.read<ConversionCubit>().convertPdfToDocx(filePath);
+                        },
+                        title: 'PDF to Word',
+                      ),
                     );
                   },
                 ),
@@ -34,7 +41,13 @@ class ConvertFromPdf extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(fileTypeExtension:['pdf'],),
+                      builder: (BuildContext context) => DragDropDialog(
+                        fileTypeExtension: const ['pdf'],
+                        callBack: (String filePath) {
+                          context.read<ConversionCubit>().convertPdfToJpg(filePath);
+                        },
+                        title: 'PDF to Jpg',
+                      ),
                     );
                   },
                 ),
@@ -44,7 +57,13 @@ class ConvertFromPdf extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(fileTypeExtension:['pdf'],),
+                      builder: (BuildContext context) => DragDropDialog(
+                        fileTypeExtension: const ['pdf'],
+                        callBack: (String filePath) {
+                          context.read<ConversionCubit>().convertPdfToTxt(filePath);
+                        },
+                        title: 'PDF to Text',
+                      ),
                     );
                   },
                 ),
@@ -54,11 +73,16 @@ class ConvertFromPdf extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => const DragDropDialog(fileTypeExtension:['pdf'],),
+                      builder: (BuildContext context) => DragDropDialog(
+                        fileTypeExtension: const ['pdf'],
+                        callBack: (String filePath) {
+                          context.read<ConversionCubit>().convertPdfToHtml(filePath);
+                        },
+                        title: 'PDF to HTML',
+                      ),
                     );
                   },
                 ),
-
               ],
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pdf_to_word/controller/cubits/conversion_cubit/conversion_cubit.dart';
 import 'package:pdf_to_word/controller/cubits/file_picker_cubit/file_picker_cubit.dart';
 import 'package:pdf_to_word/controller/cubits/theme_Cubit/theme_cubit.dart';
 import 'package:pdf_to_word/controller/cubits/theme_Cubit/theme_state.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => ThemeCubit()),
         BlocProvider(create: (context) => FilePickerCubit()),
+        BlocProvider(create: (context) => ConversionCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

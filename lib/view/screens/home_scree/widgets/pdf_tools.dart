@@ -36,10 +36,10 @@ class PDFTools extends StatelessWidget {
                   label: 'Merge PDF',
                   svg: 'assets/svg/Merge PDF.svg',
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) => const DragDropDialog(fileTypeExtension: ['pdf'],),
-                    );
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (BuildContext context) => const DragDropDialog(fileTypeExtension: ['pdf'],),
+                    // );
                   },
                 ),
                 ToolCard(

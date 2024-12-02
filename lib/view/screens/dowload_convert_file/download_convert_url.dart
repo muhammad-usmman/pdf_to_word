@@ -16,7 +16,9 @@ class DownloadConvertedFile extends StatefulWidget {
     required this.fileUrl,
     required this.fileName,
   });
-
+  static MaterialPageRoute<void> route(String fileUrl,String fileName) => MaterialPageRoute(
+    builder: (_) =>   DownloadConvertedFile(fileUrl: fileUrl, fileName: fileName,),
+  );
   @override
   State<DownloadConvertedFile> createState() => _DownloadConvertedFileState();
 }
@@ -27,8 +29,8 @@ class _DownloadConvertedFileState extends State<DownloadConvertedFile> {
     return Scaffold(
       appBar: const CustomAppBar(),
       body: Container(
-        // width: 0.8.sw,
-        // height: 0.6.sh,
+        width: 1.sw,
+        height: 1.sh,
         decoration: BoxDecoration(
           color: context.read<ThemeCubit>().state.themeData == AppThemes.light
               ? Colors.transparent
@@ -40,8 +42,7 @@ class _DownloadConvertedFileState extends State<DownloadConvertedFile> {
             filterQuality: FilterQuality.high,
             fit: BoxFit.fill,
           ),
-          borderRadius: BorderRadius.circular(25),
-        ),
+         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,13 +79,14 @@ class _DownloadConvertedFileState extends State<DownloadConvertedFile> {
                     ),
                     const SizedBox(height: 8),
                     CustomButton(
+
                       onTap: () {
                         DownloadFileUrl.downloadFile(
-                            'C:/Users/Usman/Downloads', widget.fileName, widget.fileUrl);
+                            'C:/Users/Usman/Downloads', widget.fileName, widget.fileUrl,context);
                       },
                       title: "Click here to download",
                       height: 0.07.sh,
-                      width: 0.2.sw,
+                      width: 0.35.sw,
                     ),
                   ],
                 ),
