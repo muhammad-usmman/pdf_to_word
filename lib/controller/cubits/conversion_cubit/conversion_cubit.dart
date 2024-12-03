@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:pdf_to_word/utils/repositories/other_conversions_repo/other_conversion_repo.dart';
 import 'package:pdf_to_word/utils/repositories/pdf_to_conversions_repo/pdf_to_conversions_repo.dart';
+import 'package:pdf_to_word/utils/repositories/pdf_tools_repo/pdf_tools_repo.dart';
 import 'package:pdf_to_word/utils/repositories/to_pdf_conversions_repo/to_pdf_repo.dart';
 
 part 'conversion_state.dart';
@@ -186,6 +187,19 @@ class ConversionCubit extends Cubit<ConversionState> {
 
     final repo = OtherConversionRepo();
     final result = await repo.convertPngToJpg(filePath);
+
+    if (result.containsKey('error')) {
+      emit(ConversionError(result['error']!));
+    } else {
+      emit(ConversionLoaded(fileName: result['fileName']!, fileUrl: result['fileUrl']!));
+    }
+  }
+  // Pdf Tools
+  Future<void> mergePDFs(List<String> filePath) async {
+    emit(ConversionLoading());
+
+    final repo = PdfToolsRepo();
+    final result = await repo.mergePdfs(filePath);
 
     if (result.containsKey('error')) {
       emit(ConversionError(result['error']!));

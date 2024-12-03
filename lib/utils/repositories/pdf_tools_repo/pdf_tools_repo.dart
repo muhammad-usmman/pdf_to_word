@@ -4,10 +4,10 @@ import 'dart:developer';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-class ToPdfConversionRepo {
+class PdfToolsRepo {
   final apiKey = dotenv.env['CONVERTAPI_SECRET'];
 
-    Future<Map<String, String>> _convert(String endpoint, String filePath) async {
+  Future<Map<String, String>> _convert(String endpoint, String filePath) async {
     final url = Uri.parse(endpoint);
 
     try {
@@ -46,25 +46,13 @@ class ToPdfConversionRepo {
     }
   }
 
-  Future<Map<String, String>> convertDocxToPdf(String filePath) async {
-    return await _convert('https://v2.convertapi.com/convert/docx/to/pdf', filePath);
-  }
+  // Future<Map<String, String>> convertDocxToPdf(String filePath) async {
+  //   return await _convert('https://v2.convertapi.com/convert/docx/to/pdf', filePath);
+  // }
 
-  Future<Map<String, String>> convertPptToPdf(String filePath) async {
-    return await _convert('https://v2.convertapi.com/convert/pptx/to/pdf', filePath);
-  }
 
-  Future<Map<String, String>> convertBmpToPdf(String filePath) async {
-    return await _convert('https://v2.convertapi.com/convert/bmp/to/pdf', filePath);
-  }
 
-  Future<Map<String, String>> convertXlsToPdf(String filePath) async {
-    return await _convert('https://v2.convertapi.com/convert/xlsx/to/pdf', filePath);
-  }
-
-// Generic Image to PDF Conversion
-// this is for all images u can find supported types in UI code
-  Future<Map<String, String>> convertImageToPdf(String filePath) async {
+  Future<Map<String, String>> mergePdfs(List<String> filePath) async {
 
     try {
       if (apiKey == null || apiKey == '') {
@@ -75,9 +63,28 @@ class ToPdfConversionRepo {
         'Authorization': 'Bearer $apiKey',
       };
 
-      var request = http.MultipartRequest('POST', Uri.parse('https://v2.convertapi.com/convert/images/to/pdf'));
-      request.files.add(await http.MultipartFile.fromPath('Files', filePath));      request.headers.addAll(headers);
-      request.fields.addAll({'Timeout': '900', 'StoreFile': 'true'});
+      var request = http.MultipartRequest('POST', Uri.parse('https://v2.convertapi.com/convert/pdf/to/merge'));
+
+      for (int i = 0; i < filePath.length; i++){
+        request.files.add(await http.MultipartFile.fromPath('Files[$i]', filePath[i]));
+      }
+
+      // for(String path in filePath){
+      //   request.files.add(await http.MultipartFile.fromPath('Files', path));
+      //
+      // }
+      //
+      // request.files.add(await http.MultipartFile.fromPath('Files', filePath));
+      request.headers.addAll(headers);
+
+      request.fields.addAll({'Timeout': '900',
+        'StoreFile': 'true',
+        'RetainNumbering': 'false',
+        'RemoveDuplicateFonts': 'false',
+        'BookmarksToc': 'disabled',
+        'OpenPage': '1',
+        'PageSize': 'default',
+        'PageOrientation': 'default'});
 
       http.StreamedResponse response = await request.send();
 

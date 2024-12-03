@@ -16,22 +16,22 @@ import 'package:pdf_to_word/utils/toast_helper.dart';
 import 'package:pdf_to_word/view/screens/dowload_convert_file/download_convert_url.dart';
 import 'package:pdf_to_word/view/shared/custom_button.dart';
 
-class DragDropDialog extends StatefulWidget {
+class DragDropDialogMultipleFiles extends StatefulWidget {
   final List<String> fileTypeExtension;
-  final Function(String filePath) callBack;
+  final Function(List<String> filePath) callBack;
   final String title;
 
-  const DragDropDialog(
+  const DragDropDialogMultipleFiles(
       {super.key, required this.fileTypeExtension, required this.callBack, required this.title});
 
   @override
-  State<DragDropDialog> createState() => _DragDropDialogState();
+  State<DragDropDialogMultipleFiles> createState() => _DragDropDialogMultipleFilesState();
 }
 
-class _DragDropDialogState extends State<DragDropDialog> {
+class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFiles> {
   bool _dragging = false;
-  String selectedFile = 'Drag & Drop File Here';
-  String selectedFilePath = '';
+  List<String> selectedFile = [];
+  List<String> selectedFilePath = [];
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +109,8 @@ class _DragDropDialogState extends State<DragDropDialog> {
                         listener: (context, state) {
                           if (state is ConversionLoaded && mounted) {
                             ToastHelper.success(context, 'File conversion Successful');
-                            Navigator.push(context, DownloadConvertedFile.route(state.fileUrl, state.fileName));
-
+                            Navigator.push(context,
+                                DownloadConvertedFile.route(state.fileUrl, state.fileName));
                           } else if (state is ConversionError && mounted) {
                             ToastHelper.success(context,
                                 'Something Unexpected happened. Check your Internet or Try again');
@@ -137,8 +137,9 @@ class _DragDropDialogState extends State<DragDropDialog> {
                             return DropTarget(
                               onDragDone: (detail) async {
                                 log(detail.files.first.path);
-                                selectedFile = detail.files.first.name;
-                                selectedFilePath = detail.files.first.path;
+                                // selectedFile = detail.files.first.name;
+                                selectedFilePath.add(detail.files.first.path);
+                                selectedFile.add(detail.files.first.name);
                                 // var result = await ToPdfConversionRepo().convertDocxToPdf(
                                 //     detail.files.first.path.toString(), );
                                 // Navigator.push(
@@ -177,8 +178,8 @@ class _DragDropDialogState extends State<DragDropDialog> {
                                         ToastHelper.warning(context, state.error, '');
                                       } else if (state is FilePickerLoaded) {
                                         setState(() {
-                                          selectedFilePath = state.finalUrl.first;
-                                          selectedFile = state.fileName.first;
+                                          selectedFilePath = state.finalUrl;
+                                          selectedFile = state.fileName;
                                         });
                                         print(selectedFile);
                                       }
@@ -201,11 +202,22 @@ class _DragDropDialogState extends State<DragDropDialog> {
                                         children: [
                                           SvgPicture.asset('assets/svg/Upload.svg'),
                                           const SizedBox(height: 16),
-                                          Text(
-                                            selectedFile,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w600, fontSize: 24),
-                                          ),
+                                          selectedFile.isEmpty
+                                              ? const Text(
+                                                  'Drag & Drop File Here',
+                                                  style: TextStyle(
+                                                      fontWeight: FontWeight.w600, fontSize: 24),
+                                                )
+                                              : Column(
+                                                    children: selectedFile.map((e) {
+                                                  return Padding(
+                                                    padding: const EdgeInsets.all(2.0),
+                                                    child: Text(e,
+                                                        style: const TextStyle(
+                                                            fontWeight: FontWeight.w600,
+                                                            fontSize: 16)),
+                                                  );
+                                                }).toList()),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -236,7 +248,7 @@ class _DragDropDialogState extends State<DragDropDialog> {
                                             onTap: () {
                                               context
                                                   .read<FilePickerCubit>()
-                                                  .pickFile(widget.fileTypeExtension);
+                                                  .pickMultipleFile(widget.fileTypeExtension);
                                             },
                                             title: "Browse Files",
                                             height: 0.07.sh,
