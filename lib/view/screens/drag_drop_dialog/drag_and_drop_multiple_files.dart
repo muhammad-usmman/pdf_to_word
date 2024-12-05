@@ -13,7 +13,7 @@ import 'package:pdf_to_word/controller/cubits/theme_Cubit/theme_cubit.dart';
 import 'package:pdf_to_word/utils/colors.dart';
 import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/utils/toast_helper.dart';
-import 'package:pdf_to_word/view/screens/dowload_convert_file/download_convert_url.dart';
+import 'package:pdf_to_word/view/screens/dowload_converted_file/download_converted_url_page.dart';
 import 'package:pdf_to_word/view/shared/custom_button.dart';
 
 class DragDropDialogMultipleFiles extends StatefulWidget {
@@ -200,7 +200,8 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                                       return Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          SvgPicture.asset('assets/svg/Upload.svg'),
+                                          if (selectedFilePath.isEmpty)
+                                            SvgPicture.asset('assets/svg/Upload.svg'),
                                           const SizedBox(height: 16),
                                           selectedFile.isEmpty
                                               ? const Text(
@@ -209,16 +210,20 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                                                       fontWeight: FontWeight.w600, fontSize: 24),
                                                 )
                                               : Column(
-                                                    children: selectedFile.map((e) {
+                                                  children: selectedFile.map((e) {
                                                   return Padding(
                                                     padding: const EdgeInsets.all(2.0),
-                                                    child: Text(e,
-                                                        style: const TextStyle(
-                                                            fontWeight: FontWeight.w600,
-                                                            fontSize: 16)),
+                                                    child: FittedBox(
+                                                      fit: BoxFit.scaleDown,
+                                                      child: Text(e,
+                                                          style: const TextStyle(
+                                                              fontWeight: FontWeight.w600,
+                                                              fontSize: 16)),
+                                                    ),
                                                   );
                                                 }).toList()),
-                                          Row(
+                                          if (selectedFilePath.isEmpty)
+                                            Row(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
@@ -244,15 +249,18 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                                             ],
                                           ),
                                           const SizedBox(height: 8),
-                                          CustomButton(
-                                            onTap: () {
-                                              context
-                                                  .read<FilePickerCubit>()
-                                                  .pickMultipleFile(widget.fileTypeExtension);
-                                            },
-                                            title: "Browse Files",
-                                            height: 0.07.sh,
-                                            width: 0.2.sw,
+                                          FittedBox(
+                                            fit:BoxFit.scaleDown,
+                                            child: CustomButton(
+                                              onTap: () {
+                                                context
+                                                    .read<FilePickerCubit>()
+                                                    .pickMultipleFile(widget.fileTypeExtension);
+                                              },
+                                              title: selectedFilePath.isNotEmpty?"Add More Files":"Browse Files",
+                                              height: 0.06.sh,
+                                              width: 0.2.sw,
+                                            ),
                                           ),
                                           5.verticalSpace,
                                           if (selectedFilePath.isNotEmpty)
@@ -261,7 +269,7 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                                                 widget.callBack(selectedFilePath);
                                               },
                                               title: "Convert",
-                                              height: 0.07.sh,
+                                              height: 0.06.sh,
                                               width: 0.2.sw,
                                             ),
                                         ],

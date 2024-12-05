@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {
           return ScreenUtilInit(
-              designSize: const Size(800, 600),
+              designSize: MediaQuery.of(context).size,
 
               minTextAdapt: true,
               splitScreenMode: false,

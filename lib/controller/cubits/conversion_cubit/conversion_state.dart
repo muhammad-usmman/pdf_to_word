@@ -12,6 +12,11 @@ final class ConversionLoaded extends ConversionState {
   final String fileUrl;
   ConversionLoaded( {required this.fileUrl,required this.fileName});
 }
+final class ConversionListLoaded extends ConversionState {
+  final List<String> fileNames;
+  final List<String> fileUrls;
+  ConversionListLoaded( {required this.fileUrls,required this.fileNames});
+}
 
 final class ConversionError extends ConversionState {
 

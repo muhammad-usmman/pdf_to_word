@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:pdf_to_word/utils/repositories/other_conversions_repo/other_conversion_repo.dart';
@@ -62,8 +64,9 @@ class ConversionCubit extends Cubit<ConversionState> {
       emit(ConversionLoaded(fileName: result['fileName']!, fileUrl: result['fileUrl']!));
     }
   }
+
   // this is for all images u can find supported types in UI code
-  Future<void> convertImagesToPdf(String filePath) async {
+  Future<void> convertImagesToPdf(List<String> filePath) async {
     emit(ConversionLoading());
 
     final repo = ToPdfConversionRepo();
@@ -194,12 +197,49 @@ class ConversionCubit extends Cubit<ConversionState> {
       emit(ConversionLoaded(fileName: result['fileName']!, fileUrl: result['fileUrl']!));
     }
   }
+
   // Pdf Tools
   Future<void> mergePDFs(List<String> filePath) async {
     emit(ConversionLoading());
 
     final repo = PdfToolsRepo();
     final result = await repo.mergePdfs(filePath);
+
+    if (result.containsKey('error')) {
+      emit(ConversionError(result['error']!));
+    } else {
+      emit(ConversionLoaded(fileName: result['fileName']!, fileUrl: result['fileUrl']!));
+    }
+  }
+
+  Future<void> splitPdf(String filePath, String splitPattern) async {
+    emit(ConversionLoading());
+
+    final repo = PdfToolsRepo();
+    log(splitPattern);
+    final result = await repo.splitPdfs(filePath, splitPattern);
+
+    if (result.isNotEmpty && result.first.containsKey('error')) {
+      emit(ConversionError(result.first['error']!));
+    } else {
+      List<String> fileUrls = [];
+      List<String> fileNames = [];
+
+      for (var file in result) {
+        fileUrls.add(file['fileUrl']!);
+        fileNames.add(file['fileName']!);
+      }
+      log(fileUrls.toString());
+      log(fileNames.toString());
+      emit(ConversionListLoaded(fileUrls: fileUrls, fileNames: fileNames));
+    }
+  }
+
+  Future<void> deletePdf(String filePath, String pagePattern) async {
+    emit(ConversionLoading());
+
+    final repo = PdfToolsRepo();
+    final result = await repo.deletePdfsPages(filePath, pagePattern);
 
     if (result.containsKey('error')) {
       emit(ConversionError(result['error']!));

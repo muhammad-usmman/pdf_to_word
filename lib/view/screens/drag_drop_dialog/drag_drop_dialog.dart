@@ -13,7 +13,8 @@ import 'package:pdf_to_word/controller/cubits/theme_Cubit/theme_cubit.dart';
 import 'package:pdf_to_word/utils/colors.dart';
 import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/utils/toast_helper.dart';
-import 'package:pdf_to_word/view/screens/dowload_convert_file/download_convert_url.dart';
+import 'package:pdf_to_word/view/screens/dowload_converted_file/dowload_multiple_converted_url.dart';
+import 'package:pdf_to_word/view/screens/dowload_converted_file/download_converted_url_page.dart';
 import 'package:pdf_to_word/view/shared/custom_button.dart';
 
 class DragDropDialog extends StatefulWidget {
@@ -21,8 +22,22 @@ class DragDropDialog extends StatefulWidget {
   final Function(String filePath) callBack;
   final String title;
 
+  ///(String filePath,String fieldText)
+  final Function(String filePath, String fieldText)? callBackWithFields;
+  final String? fieldTitle;
+  final String? fieldExplanation;
+  final bool inputFieldsRequired;
+
+  ///callBackWithFields fieldTitle fieldExplanation only work if inputFieldsRequired is set to true then the callback wont work
   const DragDropDialog(
-      {super.key, required this.fileTypeExtension, required this.callBack, required this.title});
+      {super.key,
+      required this.fileTypeExtension,
+      required this.callBack,
+      required this.title,
+      this.inputFieldsRequired = false,
+      this.fieldTitle,
+      this.fieldExplanation,
+      this.callBackWithFields});
 
   @override
   State<DragDropDialog> createState() => _DragDropDialogState();
@@ -32,6 +47,13 @@ class _DragDropDialogState extends State<DragDropDialog> {
   bool _dragging = false;
   String selectedFile = 'Drag & Drop File Here';
   String selectedFilePath = '';
+  TextEditingController fieldController = TextEditingController();
+
+  @override
+  void dispose() {
+    fieldController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,12 +131,22 @@ class _DragDropDialogState extends State<DragDropDialog> {
                         listener: (context, state) {
                           if (state is ConversionLoaded && mounted) {
                             ToastHelper.success(context, 'File conversion Successful');
-                            Navigator.push(context, DownloadConvertedFile.route(state.fileUrl, state.fileName));
-
+                            Navigator.push(context,
+                                DownloadConvertedFile.route(state.fileUrl, state.fileName));
                           } else if (state is ConversionError && mounted) {
                             ToastHelper.success(context,
                                 'Something Unexpected happened. Check your Internet or Try again');
                             Navigator.pop(context);
+                          }
+
+                          if (state is ConversionListLoaded && mounted) {
+                            ToastHelper.success(context, 'File conversion Successful');
+                            log(state.fileUrls.length.toString());
+                            log(state.fileNames.length.toString());
+                            Navigator.push(
+                                context,
+                                DownloadMultipleConvertedFile.route(
+                                    state.fileUrls, state.fileNames));
                           }
                         },
                         builder: (context, state) {
@@ -199,54 +231,100 @@ class _DragDropDialogState extends State<DragDropDialog> {
                                       return Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          SvgPicture.asset('assets/svg/Upload.svg'),
+                                          if (selectedFilePath.isEmpty)
+                                            SvgPicture.asset('assets/svg/Upload.svg'),
                                           const SizedBox(height: 16),
                                           Text(
                                             selectedFile,
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.w600, fontSize: 24),
                                           ),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                height: 0.8,
-                                                width: 100,
-                                                color: AppColors.grey,
-                                              ),
-                                              Text(
-                                                "OR",
-                                                style: TextStyle(
-                                                    color: Colors.grey.shade400,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 26),
-                                              ),
-                                              Container(
-                                                margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                height: 0.8,
-                                                width: 100,
-                                                color: AppColors.grey,
-                                              ),
-                                            ],
-                                          ),
+                                          if (selectedFilePath.isEmpty)
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.symmetric(horizontal: 10),
+                                                  height: 0.8,
+                                                  width: 100,
+                                                  color: AppColors.grey,
+                                                ),
+                                                Text(
+                                                  "OR",
+                                                  style: TextStyle(
+                                                      color: Colors.grey.shade400,
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 26),
+                                                ),
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.symmetric(horizontal: 10),
+                                                  height: 0.8,
+                                                  width: 100,
+                                                  color: AppColors.grey,
+                                                ),
+                                              ],
+                                            ),
                                           const SizedBox(height: 8),
-                                          CustomButton(
-                                            onTap: () {
-                                              context
-                                                  .read<FilePickerCubit>()
-                                                  .pickFile(widget.fileTypeExtension);
-                                            },
-                                            title: "Browse Files",
-                                            height: 0.07.sh,
-                                            width: 0.2.sw,
-                                          ),
-                                          5.verticalSpace,
+                                          if (selectedFilePath.isEmpty)
+                                            CustomButton(
+                                              onTap: () {
+                                                context
+                                                    .read<FilePickerCubit>()
+                                                    .pickFile(widget.fileTypeExtension);
+                                              },
+                                              title: "Browse Files",
+                                              height: 0.07.sh,
+                                              width: 0.2.sw,
+                                            ),
+                                          if (widget.inputFieldsRequired &&
+                                              selectedFilePath.isNotEmpty)
+                                            Column(
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.symmetric(
+                                                      horizontal: 16.0, vertical: 5),
+                                                  child: TextField(
+                                                    controller: fieldController,
+                                                    decoration: InputDecoration(
+                                                      labelText: widget.fieldTitle,
+                                                      filled: true,
+                                                      hintStyle: TextStyle(color: Colors.grey[500]),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(8),
+                                                        borderSide: BorderSide.none,
+                                                      ),
+                                                      focusedBorder: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(8),
+                                                        borderSide: const BorderSide(
+                                                            color: Colors.red, width: 2),
+                                                      ),
+                                                    ),
+                                                    style: const TextStyle(color: Colors.white),
+                                                    cursorColor: Colors.red,
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(horizontal: 16.0),
+                                                  child: Text(
+                                                    widget.fieldExplanation ?? '',
+                                                    style: const TextStyle(
+                                                        fontWeight: FontWeight.w300, fontSize: 12),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          10.verticalSpace,
                                           if (selectedFilePath.isNotEmpty)
                                             CustomButton(
                                               onTap: () {
-                                                widget.callBack(selectedFilePath);
+                                                widget.inputFieldsRequired
+                                                    ? widget.callBackWithFields!(
+                                                        selectedFilePath, fieldController.text)
+                                                    : widget.callBack(selectedFilePath);
                                               },
                                               title: "Convert",
                                               height: 0.07.sh,

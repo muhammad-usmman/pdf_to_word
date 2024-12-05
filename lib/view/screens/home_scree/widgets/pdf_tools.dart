@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdf_to_word/controller/cubits/conversion_cubit/conversion_cubit.dart';
@@ -33,7 +35,25 @@ class PDFTools extends StatelessWidget {
                 ToolCard(
                   label: 'Split PDF',
                   svg: 'assets/svg/Split PDF.svg',
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => DragDropDialog(
+                        inputFieldsRequired: true,
+                        fileTypeExtension: const ['pdf'],
+                        callBack: (String filePath) {
+                         },
+                        callBackWithFields:(String filePath,String fieldText){
+                          log('called');
+                          context.read<ConversionCubit>().splitPdf(filePath,fieldText);
+
+                        } ,
+                        title: 'Split PDF',
+                        fieldExplanation:'Split PDF into chunks of pages by a pattern.\nFor example, if you set 3,2 for a ten-page PDF,it would be divided into four PDF files that contain 3,2,3,2 pages accordingly.The pattern is repeated until there are no pages left.\nDefault is 1.',
+                          fieldTitle: 'Split By Pattern',
+                      ),
+                    );
+                  },
                 ),
                 ToolCard(
                   label: 'Merge PDF',
@@ -47,6 +67,7 @@ class PDFTools extends StatelessWidget {
                           context.read<ConversionCubit>().mergePDFs(filePath);
                         },
                         title: 'Merge PDF',
+
                       ),
                     );
                   },
@@ -54,7 +75,25 @@ class PDFTools extends StatelessWidget {
                 ToolCard(
                   label: 'Delete Pages',
                   svg: 'assets/svg/Delete Page.svg',
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => DragDropDialog(
+                        inputFieldsRequired: true,
+                        fileTypeExtension: const ['pdf'],
+                        callBack: (String filePath) {
+                        },
+                        callBackWithFields:(String filePath,String fieldText){
+                          log('called');
+                          context.read<ConversionCubit>().deletePdf(filePath,fieldText);
+                        } ,
+                        title: 'Delete PDF Pages',
+                        fieldExplanation:'Set page range or individual pages to delete. Example 1-10 or 1,2,5.',
+                        fieldTitle: 'Page Range',
+                      ),
+                    );
+
+                  },
                 ),
                 ToolCard(
                   label: 'Delete Blank Pages',

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pdf_to_word/utils/colors.dart';
+ import 'package:pdf_to_word/utils/colors.dart';
 
 class CustomButton extends StatelessWidget {
   final String title;
@@ -19,17 +19,21 @@ class CustomButton extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
+
         width: width,
         height: height,
         decoration: BoxDecoration(
             color: AppColors.red, borderRadius: BorderRadius.circular(8)),
         child: Center(
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w600,
-              fontSize: 30,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              title,
+              style:   const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 26,
+              ),
             ),
           ),
         ),

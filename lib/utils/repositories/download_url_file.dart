@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -18,4 +19,34 @@ class DownloadFileUrl {
 
     }
   }
+  static Future<void> downloadMultipleFiles(
+      String outputDir, List<String> fileNames, List<String> fileUrls, BuildContext context) async {
+    if (fileNames.length != fileUrls.length) {
+      ToastHelper.warning(context, 'File names and URLs count mismatch', '');
+      return;
+    }
+
+    for (int i = 0; i < fileUrls.length; i++) {
+      try {
+        final fileUrl = fileUrls[i];
+        final fileName = fileNames[i];
+        log(fileName);
+        log(fileUrl);
+        final pdfResponse = await http.get(Uri.parse(fileUrl));
+
+        if (pdfResponse.statusCode == 200) {
+          final outputPath = '$outputDir/$fileName';
+          final file = File(outputPath);
+
+          await file.writeAsBytes(pdfResponse.bodyBytes);
+          ToastHelper.success(context, 'Downloaded: $fileName');
+        } else {
+          ToastHelper.warning(context, 'Failed to download: $fileName', '');
+        }
+      } catch (e) {
+        ToastHelper.warning(context, 'Error downloading $fileNames: $e', '');
+      }
+    }
+  }
+
 }

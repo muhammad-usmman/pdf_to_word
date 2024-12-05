@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 class ToPdfConversionRepo {
   final apiKey = dotenv.env['CONVERTAPI_SECRET'];
 
-    Future<Map<String, String>> _convert(String endpoint, String filePath) async {
+  Future<Map<String, String>> _convert(String endpoint, String filePath) async {
     final url = Uri.parse(endpoint);
 
     try {
@@ -64,8 +64,47 @@ class ToPdfConversionRepo {
 
 // Generic Image to PDF Conversion
 // this is for all images u can find supported types in UI code
-  Future<Map<String, String>> convertImageToPdf(String filePath) async {
+//   Future<Map<String, String>> convertImageToPdf(String filePath) async {
+//     try {
+//       if (apiKey == null || apiKey == '') {
+//         return {'error': 'API Key is missing or invalid.'};
+//       }
+//
+//       var headers = {
+//         'Authorization': 'Bearer $apiKey',
+//       };
+//
+//       var request = http.MultipartRequest(
+//           'POST', Uri.parse('https://v2.convertapi.com/convert/images/to/pdf'));
+//       request.files.add(await http.MultipartFile.fromPath('Files', filePath));
+//       request.headers.addAll(headers);
+//       request.fields.addAll({'Timeout': '900', 'StoreFile': 'true'});
+//
+//       http.StreamedResponse response = await request.send();
+//
+//       if (response.statusCode == 200) {
+//         final responseData = await http.Response.fromStream(response);
+//         final data = jsonDecode(responseData.body);
+//
+//         if (data['Files'] != null && data['Files'] is List && data['Files'].isNotEmpty) {
+//           final fileUrl = data['Files'][0]['Url'];
+//           final fileName = data['Files'][0]['FileName'];
+//
+//           return {'fileUrl': fileUrl, 'fileName': fileName};
+//         } else {
+//           return {'error': 'Files field is missing or empty in response.'};
+//         }
+//       } else {
+//         log("'error': 'Conversion failed: ${response.reasonPhrase} (${response.statusCode})'");
+//
+//         return {'error': 'Conversion failed: ${response.reasonPhrase} (${response.statusCode})'};
+//       }
+//     } catch (e) {
+//       return {'error': 'An unexpected error occurred: $e'};
+//     }
+//   }
 
+  Future<Map<String, String>> convertImageToPdf(List<String> filePath) async {
     try {
       if (apiKey == null || apiKey == '') {
         return {'error': 'API Key is missing or invalid.'};
@@ -75,8 +114,21 @@ class ToPdfConversionRepo {
         'Authorization': 'Bearer $apiKey',
       };
 
-      var request = http.MultipartRequest('POST', Uri.parse('https://v2.convertapi.com/convert/images/to/pdf'));
-      request.files.add(await http.MultipartFile.fromPath('Files', filePath));      request.headers.addAll(headers);
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('https://v2.convertapi.com/convert/images/to/pdf'));
+
+      for (int i = 0; i < filePath.length; i++) {
+        request.files.add(await http.MultipartFile.fromPath('Files[$i]', filePath[i]));
+      }
+
+      // for(String path in filePath){
+      //   request.files.add(await http.MultipartFile.fromPath('Files', path));
+      //
+      // }
+      //
+      // request.files.add(await http.MultipartFile.fromPath('Files', filePath));
+      request.headers.addAll(headers);
+
       request.fields.addAll({'Timeout': '900', 'StoreFile': 'true'});
 
       http.StreamedResponse response = await request.send();

@@ -11,25 +11,29 @@ class ToolCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
-      width: 200,
+      // height: 200,
+      // width: 200,
       child: GestureDetector(
         onTap: onTap,
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           // color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                svg,
-                height: 80,
-                width: 80,
-                fit: BoxFit.scaleDown,
-              ),
-              const SizedBox(height: 10),
-              Text(label, textAlign: TextAlign.center),
-            ],
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  svg,
+                  // height: 80,
+                  // width: 80,
+                  fit: BoxFit.scaleDown,
+                ),
+                const SizedBox(height: 10),
+                Text(label, textAlign: TextAlign.center),
+              ],
+            ),
           ),
         ),
       ),

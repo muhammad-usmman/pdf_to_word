@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdf_to_word/controller/cubits/conversion_cubit/conversion_cubit.dart';
+import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_and_drop_multiple_files.dart';
 import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_drop_dialog.dart';
 import 'package:pdf_to_word/view/shared/tool_card.dart';
 
@@ -25,7 +26,7 @@ class Home extends StatelessWidget {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) => DragDropDialog(
+                      builder: (BuildContext context) => DragDropDialogMultipleFiles(
                         fileTypeExtension: const [
                           'jpg',
                           'png',
@@ -37,7 +38,7 @@ class Home extends StatelessWidget {
                           'svg',
                           'psd'
                         ],
-                        callBack: (String filePath) {
+                        callBack: (List<String> filePath) {
                           context.read<ConversionCubit>().convertImagesToPdf(filePath);
                         },
                         title: 'Image to Pdf',
