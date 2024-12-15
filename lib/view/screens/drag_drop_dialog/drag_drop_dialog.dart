@@ -15,6 +15,7 @@ import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/utils/toast_helper.dart';
 import 'package:pdf_to_word/view/screens/dowload_converted_file/dowload_multiple_converted_url.dart';
 import 'package:pdf_to_word/view/screens/dowload_converted_file/download_converted_url_page.dart';
+import 'package:pdf_to_word/view/screens/drag_drop_dialog/widget/input_field.dart';
 import 'package:pdf_to_word/view/shared/custom_button.dart';
 
 class DragDropDialog extends StatefulWidget {
@@ -63,7 +64,7 @@ class _DragDropDialogState extends State<DragDropDialog> {
       clipBehavior: Clip.antiAlias,
       child: SizedBox(
         width: 0.8.sw,
-        height: 0.7.sh,
+        height: 0.8.sh,
         child: Stack(
           children: [
             // Main Card Container
@@ -71,7 +72,7 @@ class _DragDropDialogState extends State<DragDropDialog> {
             Positioned.fill(
               child: Container(
                 width: 0.8.sw,
-                height: 0.6.sh,
+                height: 0.8.sh,
                 decoration: BoxDecoration(
                   color: context.read<ThemeCubit>().state.themeData == AppThemes.light
                       ? Colors.transparent
@@ -95,8 +96,8 @@ class _DragDropDialogState extends State<DragDropDialog> {
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
                         widget.title,
-                        style: const TextStyle(
-                          fontSize: 30,
+                        style:   TextStyle(
+                          fontSize: 22.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -104,9 +105,9 @@ class _DragDropDialogState extends State<DragDropDialog> {
                     const Spacer(),
                     // File Upload Area
                     Container(
-                      width: 0.45.sw,
-                      height: 0.45.sh,
-                      padding: const EdgeInsets.all(25),
+                      width: 0.65.sw,
+                      height: 0.65.sh,
+                      padding: const EdgeInsets.all(28),
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -129,7 +130,7 @@ class _DragDropDialogState extends State<DragDropDialog> {
                       ),
                       child: BlocConsumer<ConversionCubit, ConversionState>(
                         listener: (context, state) {
-                          if (state is ConversionLoaded && mounted) {
+                          if (state is ConversionFileLoaded && mounted) {
                             ToastHelper.success(context, 'File conversion Successful');
                             Navigator.push(context,
                                 DownloadConvertedFile.route(state.fileUrl, state.fileName));
@@ -171,16 +172,8 @@ class _DragDropDialogState extends State<DragDropDialog> {
                                 log(detail.files.first.path);
                                 selectedFile = detail.files.first.name;
                                 selectedFilePath = detail.files.first.path;
-                                // var result = await ToPdfConversionRepo().convertDocxToPdf(
-                                //     detail.files.first.path.toString(), );
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (BuildContext context) =>
-                                //               DownloadConvertedFile(fileUrl: result['fileUrl']!, fileName: result['fileName']!,)));
                                 setState(() {
-                                  // _list.addAll(detail.files);
-                                });
+                                 });
                               },
                               onDragEntered: (detail) {
                                 log(detail.globalPosition.toString());
@@ -228,109 +221,106 @@ class _DragDropDialogState extends State<DragDropDialog> {
                                         );
                                       }
 
-                                      return Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          if (selectedFilePath.isEmpty)
-                                            SvgPicture.asset('assets/svg/Upload.svg'),
-                                          const SizedBox(height: 16),
-                                          Text(
-                                            selectedFile,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w600, fontSize: 24),
-                                          ),
-                                          if (selectedFilePath.isEmpty)
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.symmetric(horizontal: 10),
-                                                  height: 0.8,
-                                                  width: 100,
-                                                  color: AppColors.grey,
-                                                ),
-                                                Text(
-                                                  "OR",
-                                                  style: TextStyle(
-                                                      color: Colors.grey.shade400,
-                                                      fontWeight: FontWeight.w600,
-                                                      fontSize: 26),
-                                                ),
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.symmetric(horizontal: 10),
-                                                  height: 0.8,
-                                                  width: 100,
-                                                  color: AppColors.grey,
-                                                ),
-                                              ],
+                                      return SingleChildScrollView(
+                                        scrollDirection: Axis.vertical,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            if (selectedFilePath.isEmpty)
+                                              SvgPicture.asset('assets/svg/Upload.svg',width: 0.1.sw,height: 0.1.sh
+                                                ,),
+                                            16.verticalSpace,
+                                            Text(
+                                              selectedFile,
+                                              style:   TextStyle(
+                                                  fontWeight: FontWeight.w600, fontSize: 18.sp),
                                             ),
-                                          const SizedBox(height: 8),
-                                          if (selectedFilePath.isEmpty)
-                                            CustomButton(
-                                              onTap: () {
-                                                context
-                                                    .read<FilePickerCubit>()
-                                                    .pickFile(widget.fileTypeExtension);
-                                              },
-                                              title: "Browse Files",
-                                              height: 0.07.sh,
-                                              width: 0.2.sw,
-                                            ),
-                                          if (widget.inputFieldsRequired &&
-                                              selectedFilePath.isNotEmpty)
-                                            Column(
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.symmetric(
-                                                      horizontal: 16.0, vertical: 5),
-                                                  child: TextField(
-                                                    controller: fieldController,
-                                                    decoration: InputDecoration(
-                                                      labelText: widget.fieldTitle,
-                                                      filled: true,
-                                                      hintStyle: TextStyle(color: Colors.grey[500]),
-                                                      border: OutlineInputBorder(
-                                                        borderRadius: BorderRadius.circular(8),
-                                                        borderSide: BorderSide.none,
-                                                      ),
-                                                      focusedBorder: OutlineInputBorder(
-                                                        borderRadius: BorderRadius.circular(8),
-                                                        borderSide: const BorderSide(
-                                                            color: Colors.red, width: 2),
+                                            10.verticalSpace,
+                                            if (selectedFilePath.isEmpty)
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    margin:
+                                                        const EdgeInsets.symmetric(horizontal: 10),
+                                                    height: 0.8,
+                                                    width: 0.1.sw,
+                                                    color: AppColors.grey,
+                                                  ),
+                                                  Text(
+                                                    "OR",
+                                                    style: TextStyle(
+                                                        color: Colors.grey.shade400,
+                                                        fontWeight: FontWeight.w600,
+                                                        fontSize: 18.sp),
+                                                  ),
+                                                  Container(
+                                                    margin:
+                                                        const EdgeInsets.symmetric(horizontal: 10),
+                                                    height: 0.8,
+                                                    width: 0.1.sw,
+                                                    color: AppColors.grey,
+                                                  ),
+                                                ],
+                                              ),
+                                            10.verticalSpace,
+                                        
+                                            // const SizedBox(height: 8),
+                                            if (selectedFilePath.isEmpty)
+                                              CustomButton(
+                                                onTap: () {
+                                                  context
+                                                      .read<FilePickerCubit>()
+                                                      .pickFile(widget.fileTypeExtension);
+                                                },
+                                                title: "Browse Files",
+                                                height: 0.07.sh,
+                                                width: 0.2.sw,
+                                              ),
+                                            if (widget.inputFieldsRequired &&
+                                                selectedFilePath.isNotEmpty)
+                                              Column(
+                                                children: [
+                                                  SizedBox(
+                                                    height:   0.095.sh,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                      child: InputField(
+
+                                                        controller: fieldController,
+                                                           title: widget.fieldTitle??'',
+
+
                                                       ),
                                                     ),
-                                                    style: const TextStyle(color: Colors.white),
-                                                    cursorColor: Colors.red,
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(horizontal: 16.0),
-                                                  child: Text(
-                                                    widget.fieldExplanation ?? '',
-                                                    style: const TextStyle(
-                                                        fontWeight: FontWeight.w300, fontSize: 12),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          10.verticalSpace,
-                                          if (selectedFilePath.isNotEmpty)
-                                            CustomButton(
-                                              onTap: () {
-                                                widget.inputFieldsRequired
-                                                    ? widget.callBackWithFields!(
-                                                        selectedFilePath, fieldController.text)
-                                                    : widget.callBack(selectedFilePath);
-                                              },
-                                              title: "Convert",
-                                              height: 0.07.sh,
-                                              width: 0.2.sw,
-                                            ),
-                                        ],
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.symmetric(horizontal: 16.0),
+                                                    child: Text(
+                                                      widget.fieldExplanation ?? '',
+                                                      style:   TextStyle(
+                                                          fontWeight: FontWeight.w300, fontSize: 12.sp),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            10.verticalSpace,
+                                            if (selectedFilePath.isNotEmpty)
+                                              CustomButton(
+                                                onTap: () {
+                                                  widget.inputFieldsRequired
+                                                      ? widget.callBackWithFields!(
+                                                          selectedFilePath, fieldController.text)
+                                                      : widget.callBack(selectedFilePath);
+                                                },
+                                                title: "Convert",
+                                                height: 0.07.sh,
+                                                width: 0.25.sw,
+                                              ),
+                                          ],
+                                        ),
                                       );
                                     },
                                   ),

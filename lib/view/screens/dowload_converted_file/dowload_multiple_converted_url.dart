@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pdf_to_word/controller/cubits/theme_Cubit/theme_cubit.dart';
-import 'package:pdf_to_word/utils/repositories/download_url_file.dart';
-import 'package:pdf_to_word/utils/themes.dart';
+import 'package:pdf_to_word/utils/download_url_file.dart';
+ import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/view/shared/custom_app_bar.dart';
 import 'package:pdf_to_word/view/shared/custom_button.dart';
 
@@ -82,7 +82,7 @@ class _DownloadMultipleConvertedFileState extends State<DownloadMultipleConverte
 
                       onTap: () {
                         DownloadFileUrl.downloadMultipleFiles(
-                            'C:/Users/Usman/Downloads', widget.fileNames, widget.fileUrls,context);
+                             widget.fileNames, widget.fileUrls,context);
                       },
                       title: "Click here to download",
                       height: 0.07.sh,

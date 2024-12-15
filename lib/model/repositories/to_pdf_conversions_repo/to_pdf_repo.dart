@@ -104,7 +104,8 @@ class ToPdfConversionRepo {
 //     }
 //   }
 
-  Future<Map<String, String>> convertImageToPdf(List<String> filePath) async {
+  Future<Map<String, String>> convertImageToPdf(List<String> filePath, String marginVertical,
+      String marginHorizontal, String pageSize, String pageOrientation) async {
     try {
       if (apiKey == null || apiKey == '') {
         return {'error': 'API Key is missing or invalid.'};
@@ -129,7 +130,14 @@ class ToPdfConversionRepo {
       // request.files.add(await http.MultipartFile.fromPath('Files', filePath));
       request.headers.addAll(headers);
 
-      request.fields.addAll({'Timeout': '900', 'StoreFile': 'true'});
+      request.fields.addAll({
+        'Timeout': '900',
+        'StoreFile': 'true',
+        'MarginHorizontal': marginHorizontal,
+        'MarginVertical':marginVertical,
+        'PageSize': pageSize,
+        'PageOrientation': pageOrientation
+      });
 
       http.StreamedResponse response = await request.send();
 

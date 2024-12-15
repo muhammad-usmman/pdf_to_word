@@ -41,6 +41,7 @@ class _ProScreenState extends State<ProScreen> {
                   borderRadius: BorderRadius.circular(8)),
               child: SingleChildScrollView(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     10.verticalSpace,
                     const Text(
@@ -154,7 +155,7 @@ class _ProScreenState extends State<ProScreen> {
                         ),
                       ),
                     ),
-                    10.verticalSpace,
+                    15.verticalSpace,
                     SizedBox(
                       width: 0.8.sw,
                       child: const Text(
@@ -167,11 +168,15 @@ class _ProScreenState extends State<ProScreen> {
                         ),
                       ),
                     ),
+                    15.verticalSpace,
+
                     SizedBox(
                         width: 0.8.sw,
                         child: const Divider(
                           color: AppColors.grey,
                         )),
+                    15.verticalSpace,
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

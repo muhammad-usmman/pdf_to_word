@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdf_to_word/controller/cubits/conversion_cubit/conversion_cubit.dart';
 import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_and_drop_multiple_files.dart';
 import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_drop_dialog.dart';
+import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_drop_lock_unlock_pdf_dialog.dart';
 import 'package:pdf_to_word/view/shared/tool_card.dart';
 
 class PDFTools extends StatelessWidget {
@@ -25,12 +26,31 @@ class PDFTools extends StatelessWidget {
                 ToolCard(
                   label: 'Lock PDF',
                   svg: 'assets/svg/Lock PDF.svg',
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => DragDropLockUnlockPdfDialog(
+                        isLockPdf: true,
+                        fileTypeExtension: const ['pdf'],
+                        title: 'Lock PDF',
+                      ),
+                    );
+                  },
                 ),
                 ToolCard(
                   label: 'Unlock PDF',
                   svg: 'assets/svg/Unlock PDF.svg',
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => DragDropLockUnlockPdfDialog(
+                        isLockPdf: false,
+                        fileTypeExtension: const ['pdf'],
+                        title: 'Un Lock PDF',
+                      ),
+                    );
+                  },
+
                 ),
                 ToolCard(
                   label: 'Split PDF',
@@ -85,7 +105,7 @@ class PDFTools extends StatelessWidget {
                         },
                         callBackWithFields:(String filePath,String fieldText){
                           log('called');
-                          context.read<ConversionCubit>().deletePdf(filePath,fieldText);
+                          context.read<ConversionCubit>().deletePdfPages(filePath,fieldText);
                         } ,
                         title: 'Delete PDF Pages',
                         fieldExplanation:'Set page range or individual pages to delete. Example 1-10 or 1,2,5.',

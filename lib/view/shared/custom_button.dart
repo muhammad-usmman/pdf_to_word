@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
  import 'package:pdf_to_word/utils/colors.dart';
 
 class CustomButton extends StatelessWidget {
@@ -29,10 +30,10 @@ class CustomButton extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               title,
-              style:   const TextStyle(
+              style:     TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,
-                fontSize: 26,
+                fontSize: 26.sp,
               ),
             ),
           ),

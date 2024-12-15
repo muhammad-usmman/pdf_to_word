@@ -26,69 +26,81 @@ class SubscriptionTiles extends StatelessWidget {
     return Center(
       child: SizedBox(
         width: 0.2.sw,
-        height: 0.35.sh,
+        height: 320,
         child: Card(
           shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  width: 1.5, color: active ? AppColors.red : Colors.transparent),
+              side: BorderSide(width: 1.5, color: active ? AppColors.red : Colors.transparent),
               borderRadius: BorderRadius.circular(8)),
           color: Theme.of(context).cardColor, // Explicitly inherit color from the theme
 
-
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 80,
+
                   child: Stack(
                     children: [
-                      if(active)
-                      Positioned.fill(
-                          child:
-                              SvgPicture.asset('assets/svg/subsription_bg.svg')),
-                        Center(
-                        child: Text(
-                         planName,
-                          style:   TextStyle(
-                              fontSize: 28,
-                              color: active?Colors.white:context.read<ThemeCubit>().state.themeData == AppThemes.light?Colors.black:Colors.white,
-                              fontWeight: FontWeight.w600),
+                      if (active)
+                        Positioned.fill(child: SvgPicture.asset('assets/svg/subsription_bg.svg')),
+                      Center(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            planName,
+                            style: TextStyle(
+                                fontSize: 28,
+                                color: active
+                                    ? Colors.white
+                                    : context.read<ThemeCubit>().state.themeData == AppThemes.light
+                                        ? Colors.black
+                                        : Colors.white,
+                                fontWeight: FontWeight.w600),
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-                Text(
-                planDuration,
-                style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-              ),
-              6.verticalSpace,
-                Text(
-                planDiscountedPrice,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-              ),
-                Text(
-                planPrice,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-              ),
-              5.verticalSpace,
-              if(active)
-              const Text(
-                "Free Trail",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontStyle: FontStyle.italic,
-                  decoration: TextDecoration.underline,
-                  decorationColor: AppColors.red,
-                  color: AppColors.red,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  planDuration,
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                 ),
               ),
+               FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  planDiscountedPrice,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                ),
+              ),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  planPrice,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                ),
+              ),
+               if (active)
+                const FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    "Free Trail",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontStyle: FontStyle.italic,
+                      decoration: TextDecoration.underline,
+                      decorationColor: AppColors.red,
+                      color: AppColors.red,
+                    ),
+                  ),
+                ),
             ],
           ),
         ),

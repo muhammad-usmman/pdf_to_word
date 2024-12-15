@@ -13,27 +13,44 @@ import 'package:pdf_to_word/controller/cubits/theme_Cubit/theme_cubit.dart';
 import 'package:pdf_to_word/utils/colors.dart';
 import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/utils/toast_helper.dart';
+import 'package:pdf_to_word/view/screens/dowload_converted_file/dowload_multiple_converted_url.dart';
 import 'package:pdf_to_word/view/screens/dowload_converted_file/download_converted_url_page.dart';
+import 'package:pdf_to_word/view/screens/drag_drop_dialog/widget/input_field.dart';
 import 'package:pdf_to_word/view/shared/custom_button.dart';
 
-class DragDropDialogMultipleFiles extends StatefulWidget {
+class DragDropLockUnlockPdfDialog extends StatefulWidget {
   final List<String> fileTypeExtension;
-  final Function(List<String> filePath) callBack;
-  final String title;
-  final bool addCustomUI;
-  final Widget? customUi;
+   final String title;
+  final bool isLockPdf;
 
-  const DragDropDialogMultipleFiles(
-      {super.key, required this.fileTypeExtension, required this.callBack, required this.title, this.addCustomUI = false, this.customUi});
+  //  final Function(String filePath, String fieldText)? callBackWithFields;
+  // final String? fieldTitle;
+  // final String? fieldExplanation;
+  // final bool inputFieldsRequired;
+
+  const DragDropLockUnlockPdfDialog(
+      {super.key,
+      required this.fileTypeExtension,
+       required this.title,
+      required this.isLockPdf});
 
   @override
-  State<DragDropDialogMultipleFiles> createState() => _DragDropDialogMultipleFilesState();
+  State<DragDropLockUnlockPdfDialog> createState() => _DragDropLockUnlockPdfDialogState();
 }
 
-class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFiles> {
+class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialog> {
   bool _dragging = false;
-  List<String> selectedFile = [];
-  List<String> selectedFilePath = [];
+  String selectedFile = 'Drag & Drop File Here';
+  String selectedFilePath = '';
+  TextEditingController userPasswordController = TextEditingController();
+  TextEditingController ownerPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    userPasswordController.dispose();
+    ownerPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,9 +101,9 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                     const Spacer(),
                     // File Upload Area
                     Container(
-                      width: 0.55.sw,
-                      height: 0.55.sh,
-                      // padding: const EdgeInsets.all(25),
+                      width: 0.45.sw,
+                      height: 0.45.sh,
+                      padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -109,14 +126,24 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                       ),
                       child: BlocConsumer<ConversionCubit, ConversionState>(
                         listener: (context, state) {
-                          if (state is ConversionFileLoaded && mounted) {
+                          if (state is ConversionLoadedAndDownloaded && mounted) {
                             ToastHelper.success(context, 'File conversion Successful');
-                            Navigator.push(context,
-                                DownloadConvertedFile.route(state.fileUrl, state.fileName));
+                            Navigator.pop(context);
+
                           } else if (state is ConversionError && mounted) {
                             ToastHelper.success(context,
                                 'Something Unexpected happened. Check your Internet or Try again');
                             Navigator.pop(context);
+                          }
+
+                          if (state is ConversionListLoaded && mounted) {
+                            ToastHelper.success(context, 'File conversion Successful');
+                            log(state.fileUrls.length.toString());
+                            log(state.fileNames.length.toString());
+                            Navigator.push(
+                                context,
+                                DownloadMultipleConvertedFile.route(
+                                    state.fileUrls, state.fileNames));
                           }
                         },
                         builder: (context, state) {
@@ -139,9 +166,8 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                             return DropTarget(
                               onDragDone: (detail) async {
                                 log(detail.files.first.path);
-                                // selectedFile = detail.files.first.name;
-                                selectedFilePath.add(detail.files.first.path);
-                                selectedFile.add(detail.files.first.name);
+                                selectedFile = detail.files.first.name;
+                                selectedFilePath = detail.files.first.path;
                                 // var result = await ToPdfConversionRepo().convertDocxToPdf(
                                 //     detail.files.first.path.toString(), );
                                 // Navigator.push(
@@ -180,8 +206,8 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                                         ToastHelper.warning(context, state.error, '');
                                       } else if (state is FilePickerLoaded) {
                                         setState(() {
-                                          selectedFilePath = state.finalUrl;
-                                          selectedFile = state.fileName;
+                                          selectedFilePath = state.finalUrl.first;
+                                          selectedFile = state.fileName.first;
                                         });
                                         print(selectedFile);
                                       }
@@ -205,68 +231,134 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                                           if (selectedFilePath.isEmpty)
                                             SvgPicture.asset('assets/svg/Upload.svg'),
                                           const SizedBox(height: 16),
-                                          selectedFile.isEmpty
-                                              ? const Text(
-                                                  'Drag & Drop File Here',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.w600, fontSize: 24),
-                                                )
-                                              :FittedBox(
-                                              fit: BoxFit.scaleDown,
-                                              child: Text("${selectedFile.length} files Selected",
-                                                  style: const TextStyle(
-                                                      fontWeight: FontWeight.w600,
-                                                      fontSize: 16)),),
+                                          Text(
+                                            selectedFile,
+                                            style: const TextStyle(
+                                                fontWeight: FontWeight.w600, fontSize: 24),
+                                          ),
                                           if (selectedFilePath.isEmpty)
                                             Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                height: 0.8,
-                                                width: 100,
-                                                color: AppColors.grey,
-                                              ),
-                                              Text(
-                                                "OR",
-                                                style: TextStyle(
-                                                    color: Colors.grey.shade400,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 26),
-                                              ),
-                                              Container(
-                                                margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                height: 0.8,
-                                                width: 100,
-                                                color: AppColors.grey,
-                                              ),
-                                            ],
-                                          ),
-                                          if (selectedFilePath.isNotEmpty && widget.addCustomUI )
-                                            widget.customUi!,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.symmetric(horizontal: 10),
+                                                  height: 0.8,
+                                                  width: 100,
+                                                  color: AppColors.grey,
+                                                ),
+                                                Text(
+                                                  "OR",
+                                                  style: TextStyle(
+                                                      color: Colors.grey.shade400,
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 26),
+                                                ),
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.symmetric(horizontal: 10),
+                                                  height: 0.8,
+                                                  width: 100,
+                                                  color: AppColors.grey,
+                                                ),
+                                              ],
+                                            ),
                                           const SizedBox(height: 8),
-                                          FittedBox(
-                                            fit:BoxFit.scaleDown,
-                                            child: CustomButton(
+                                          if (selectedFilePath.isEmpty)
+                                            CustomButton(
                                               onTap: () {
                                                 context
                                                     .read<FilePickerCubit>()
-                                                    .pickMultipleFile(widget.fileTypeExtension);
+                                                    .pickFile(widget.fileTypeExtension);
                                               },
-                                              title: selectedFilePath.isNotEmpty?"Add More Files":"Browse Files",
-                                              height: 0.06.sh,
+                                              title: "Browse Files",
+                                              height: 0.07.sh,
                                               width: 0.2.sw,
                                             ),
-                                          ),
-                                          5.verticalSpace,
+                                          if (widget.isLockPdf == true &&
+                                              selectedFilePath.isNotEmpty)
+                                            Column(
+                                              children: [
+                                                InputField(
+                                                  controller: userPasswordController,
+                                                  title: 'User Password',
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(horizontal: 16.0),
+                                                  child: Text(
+                                                    "PDF will open with the user password. With the user password, you cannot copy text or print the PDF.",
+                                                    style: const TextStyle(
+                                                        fontWeight: FontWeight.w300, fontSize: 12),
+                                                  ),
+                                                ),
+                                                InputField(
+                                                  controller: ownerPasswordController,
+                                                  title: 'Owner Password',
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(horizontal: 16.0),
+                                                  child: Text(
+                                                    "PDFs will also open with the owner's password. There will be no restrictions. You can copy text, print the PDF, and modify the document.",
+                                                    style: const TextStyle(
+                                                        fontWeight: FontWeight.w300, fontSize: 12),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          if (widget.isLockPdf == false &&
+                                              selectedFilePath.isNotEmpty)
+                                            Column(
+                                              children: [
+                                                InputField(
+                                                  controller: ownerPasswordController,
+                                                  title: 'Owner Password',
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(horizontal: 16.0),
+                                                  child: Text(
+                                                    "Owner's password required to unlock pdf",
+                                                    style: const TextStyle(
+                                                        fontWeight: FontWeight.w300, fontSize: 12),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          10.verticalSpace,
                                           if (selectedFilePath.isNotEmpty)
                                             CustomButton(
                                               onTap: () {
-                                                widget.callBack(selectedFilePath);
+                                                if (widget.isLockPdf == true) {
+                                                  if (userPasswordController.text.isNotEmpty &&
+                                                      ownerPasswordController.text.isNotEmpty) {
+                                                    context.read<ConversionCubit>().lockPdf(
+                                                        selectedFilePath,
+                                                        selectedFile,
+                                                        userPasswordController.text,
+                                                        ownerPasswordController.text);
+                                                  } else {
+                                                    ToastHelper.warning(context,
+                                                        'Provide both password to lock PDF', '');
+                                                  }
+                                                }else if(widget.isLockPdf == false){
+
+                                                  if (ownerPasswordController.text.isNotEmpty) {
+                                                    context.read<ConversionCubit>().  unLockPdf(
+                                                        selectedFilePath,
+                                                        selectedFile,
+                                                        ownerPasswordController.text
+                                                    );
+                                                  } else {
+                                                    ToastHelper.warning(context,
+                                                        "Provide Owner's password to lock PDF", '');
+                                                  }
+                                                }
                                               },
                                               title: "Convert",
-                                              height: 0.06.sh,
+                                              height: 0.07.sh,
                                               width: 0.2.sw,
                                             ),
                                         ],
