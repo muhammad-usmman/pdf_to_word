@@ -1,5 +1,4 @@
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PremiumManager {
   final InAppPurchase inAppPurchase;
@@ -57,7 +56,7 @@ class PremiumManager {
 
   bool _verifyPurchase(PurchaseDetails purchase){
     if(purchase.productID=="7_days"){
-      purchase.
+      purchase;
 
     }
     return true;

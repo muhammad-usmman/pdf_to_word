@@ -27,7 +27,7 @@ class _DownloadMultipleConvertedFileState extends State<DownloadMultipleConverte
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: const CustomAppBar(leading: SizedBox.shrink(),),
       body: Container(
         width: 1.sw,
         height: 1.sh,

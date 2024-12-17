@@ -50,7 +50,7 @@ class _ImagesToPdfState extends State<ImagesToPdf> {
                       children: [
                         SizedBox  (
                           // width: 0.2.sw,
-                          height:   0.055.sh,
+                          height:   0.09.sh,
                           child: InputField(
                             textInputType: TextInputType.number,
                             controller: marginVerticalController,
@@ -61,8 +61,8 @@ class _ImagesToPdfState extends State<ImagesToPdf> {
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Text(
                             'Set the page vertical margin in millimeters (mm).',
-                             style: const TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 10),
+                             style:   TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 10.sp),
                           ),
                         ),
                       ],
@@ -76,7 +76,7 @@ class _ImagesToPdfState extends State<ImagesToPdf> {
                       children: [
                         SizedBox(
                           // width: 0.2.sw,
-                          height:   0.055.sh,
+                          height:   0.09.sh,
                           child: InputField(
                             textInputType: TextInputType.number,
                             controller: marginHorizontalController,
@@ -87,8 +87,8 @@ class _ImagesToPdfState extends State<ImagesToPdf> {
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Text(
                             "Set the page horizontal margin in millimeters (mm).",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 10),
+                            style:   TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 10.sp),
                           ),
                         ),
                       ],
@@ -113,8 +113,8 @@ class _ImagesToPdfState extends State<ImagesToPdf> {
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Text(
                             'Page Size',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 15),
+                            style:   TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 12.sp),
                           ),
                         ),
                         CustomDropDown(
@@ -144,8 +144,8 @@ class _ImagesToPdfState extends State<ImagesToPdf> {
                           child: Text(
                             'The property scales each image to fit a given page size.',
                             maxLines: 5,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 10),
+                            style:   TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 10.sp),
                           ),
                         ),
                       ],
@@ -161,8 +161,8 @@ class _ImagesToPdfState extends State<ImagesToPdf> {
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Text(
                             "PageOrientation",
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w300, fontSize: 15),
+                            style:   TextStyle(
+                                fontWeight: FontWeight.w300, fontSize: 12.sp),
                           ),
                                            ),
                                            CustomDropDown(
@@ -186,8 +186,8 @@ class _ImagesToPdfState extends State<ImagesToPdf> {
                             child: Text(
                               'Set page orientation. Works only with the PageSize property when it is set to a value other than the Image size(default).',
                               maxLines: 5,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w300, fontSize: 10),
+                              style:   TextStyle(
+                                  fontWeight: FontWeight.w300, fontSize: 10.sp),
                             ),
                           ),
                                            ),

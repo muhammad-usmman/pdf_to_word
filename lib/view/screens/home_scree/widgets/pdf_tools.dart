@@ -118,7 +118,25 @@ class PDFTools extends StatelessWidget {
                 ToolCard(
                   label: 'Delete Blank Pages',
                   svg: 'assets/svg/delete blank page icon.svg',
-                  onTap: () {},
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => DragDropDialog(
+                        inputFieldsRequired: true,
+                        fileTypeExtension: const ['pdf'],
+                        callBack: (String filePath) {
+                        },
+                        callBackWithFields:(String filePath,String fieldText){
+                          log('called');
+                          context.read<ConversionCubit>().deletePdfPages(filePath,fieldText);
+                        } ,
+                        title: 'Delete PDF Pages',
+                        fieldExplanation:'Enter the blank pages you want to delete',
+                        fieldTitle: 'Page Range',
+                      ),
+                    );
+
+                  },
                 ),
               ],
             ),

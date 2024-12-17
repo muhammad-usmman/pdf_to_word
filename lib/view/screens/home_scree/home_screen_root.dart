@@ -21,143 +21,216 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final PageController pageController = PageController();
   int _currentPageIndex = 0;
+  bool autoOpenClose = true;
+  bool _isDrawerOpen = true; // Tracks whether the drawer is open
+  static const double smallScreenThreshold = 1400; // Threshold for small screens
 
-  // ValueNotifier<bool> whiteTheme = ValueNotifier<bool>(UserPrefs.getTheme());
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(),
-      body: Row(
-        children: [
-          Container(
-            width: 350,
-            // Adjust width as needed
-            color: Theme.of(context).primaryColor,
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Determine if the screen is small or large
+        bool isSmallScreen = constraints.maxWidth < smallScreenThreshold;
+
+        // Automatically close the drawer if the screen becomes small
+        if (isSmallScreen && _isDrawerOpen && autoOpenClose) {
+          _isDrawerOpen = false;
+        }
+        if (!isSmallScreen) {
+          _isDrawerOpen = true;
+          autoOpenClose = true;
+        }
+
+        return Scaffold(
+          appBar: CustomAppBar(
+            leading: isSmallScreen
+                ? IconButton(
+                    icon: Icon(_isDrawerOpen ? Icons.close : Icons.menu),
+                    onPressed: () {
+                      setState(() {
+                        _isDrawerOpen = !_isDrawerOpen;
+                        autoOpenClose = false;
+                      });
+                    },
+                  )
+                : SizedBox.shrink(),
+          ),
+          body: Row(
+            children: [
+              // Drawer Panel
+              if (!isSmallScreen || _isDrawerOpen)
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 300),
+                  width: _isDrawerOpen
+                      ? isSmallScreen
+                          ? 0.35.sw
+                          : 0.19.sw
+                      : 0,
+                  color: Theme.of(context).primaryColor,
+                  child: Column(
                     children: [
-                      DrawerItem(
-                        svg: 'assets/svg/home icon.svg',
-                        label: 'Home',
-                        onTap: () {
-                          pageController.jumpToPage(0);
-                          log(_currentPageIndex.toString());
-                        },
-                      ),
-                      DrawerItem(
-                        svg: 'assets/svg/convert to pdf.svg',
-                        label: 'Convert To PDF',
-                        onTap: () {
-                          pageController.jumpToPage(1);
-                          log(_currentPageIndex.toString());
-                        },
-                      ),
-                      DrawerItem(
-                        svg: 'assets/svg/convert from pdf.svg',
-                        label: 'Convert From PDF',
-                        onTap: () {
-                          pageController.jumpToPage(2);
-                          log(_currentPageIndex.toString());
-                        },
-                      ),
-                      DrawerItem(
-                        svg: 'assets/svg/PDF editor.svg',
-                        label: 'PDF Editor',
-                        onTap: () {
-                          // pageController.jumpToPage(3);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => const PDFEditor(),
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            DrawerItem(
+                              svg: 'assets/svg/home icon.svg',
+                              label: 'Home',
+                              onTap: () {
+                                pageController.jumpToPage(0);
+                                log(_currentPageIndex.toString());
+                                if (isSmallScreen) {
+                                  setState(() => _isDrawerOpen = false);
+                                }
+                              },
+                              selected: _currentPageIndex == 0,
                             ),
-                          );
-                          log(_currentPageIndex.toString());
-                        },
+                            DrawerItem(
+                              selected: _currentPageIndex == 1,
+                              svg: 'assets/svg/convert to pdf.svg',
+                              label: 'Convert To PDF',
+                              onTap: () {
+                                pageController.jumpToPage(1);
+                                log(_currentPageIndex.toString());
+                                if (isSmallScreen) {
+                                  setState(() => _isDrawerOpen = false);
+                                }
+                              },
+                            ),
+                            DrawerItem(
+                              selected: _currentPageIndex == 2,
+                              svg: 'assets/svg/convert from pdf.svg',
+                              label: 'Convert From PDF',
+                              onTap: () {
+                                pageController.jumpToPage(2);
+
+                                log(_currentPageIndex.toString());
+                                if (isSmallScreen) {
+                                  setState(() => _isDrawerOpen = false);
+                                }
+                              },
+                            ),
+                            DrawerItem(
+                              selected: _currentPageIndex == 3,
+                              svg: 'assets/svg/PDF editor.svg',
+                              label: 'PDF Editor',
+                              onTap: () {
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) => const PDFEditor(),
+                                  ),
+                                );
+                                log(_currentPageIndex.toString());
+                                if (isSmallScreen) {
+                                  setState(() => _isDrawerOpen = false);
+                                }
+                              },
+                            ),
+                            DrawerItem(
+                              selected: _currentPageIndex == 4,
+                              svg: 'assets/svg/PDF tools.svg',
+                              label: 'PDF Tools',
+                              onTap: () {
+                                pageController.jumpToPage(4);
+                                log(_currentPageIndex.toString());
+                                if (isSmallScreen) {
+                                  setState(() => _isDrawerOpen = false);
+                                }
+                              },
+                            ),
+                            DrawerItem(
+                              selected: _currentPageIndex == 5,
+                              svg: 'assets/svg/rate us.svg',
+                              label: 'Rate Us',
+                              onTap: () {
+                                setState(() {
+                                  _currentPageIndex = 5;
+                                });
+                              },
+                            ),
+                            DrawerItem(
+                              selected: _currentPageIndex == 6,
+                              svg: 'assets/svg/Support.svg',
+                              label: 'Support',
+                              onTap: () {
+                                setState(() {
+                                  _currentPageIndex = 6;
+                                });
+                              },
+                            ),
+                            DrawerItem(
+                              selected: _currentPageIndex == 7,
+                              svg: 'assets/svg/restore_purchase.svg',
+                              label: 'Restore Purchase',
+                              onTap: () {
+                                setState(() {
+                                  _currentPageIndex = 7;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                      DrawerItem(
-                        svg: 'assets/svg/PDF tools.svg',
-                        label: 'PDF Tools',
-                        onTap: () {
-                          pageController.jumpToPage(4);
-                          log(_currentPageIndex.toString());
-                        },
-                      ),
-                      DrawerItem(
-                        svg: 'assets/svg/rate us.svg',
-                        label: 'Rate Us',
-                        onTap: () {},
-                      ),
-                      DrawerItem(
-                        svg: 'assets/svg/Support.svg',
-                        label: 'Support',
-                        onTap: () {},
-                      ),
-                      DrawerItem(
-                        svg: 'assets/svg/restore_purchase.svg',
-                        label: 'Restore Purchase',
-                        onTap: () {},
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: 60.sp,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).cardTheme.color?.withOpacity(0.9) ??
+                                  Theme.of(context).cardTheme.color,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    "Upgrade to Pro",
+                                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                SvgPicture.asset(
+                                  'assets/svg/pro icon.svg',
+                                  fit: BoxFit.scaleDown,
+                                  width: 30.sp,
+                                  height: 30.sp,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardTheme.color?.withOpacity(0.9) ??
-                            Theme.of(context).cardTheme.color,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Upgrade to Pro",
-                            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-                          ),
-                          10.horizontalSpace,
-                          SvgPicture.asset(
-                            'assets/svg/pro icon.svg',
-                            width: 40,
-                            height: 40,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+              // Main Content Area
+              Expanded(
+                child: PageView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  onPageChanged: (newPage) {
+                    _currentPageIndex = newPage;
+                    setState(() {});
+                  },
+                  scrollDirection: Axis.vertical,
+                  controller: pageController,
+                  children: const [
+                    Home(),
+                    ConvertToPdf(),
+                    ConvertFromPdf(),
+                    SizedBox.shrink(),
+                    PDFTools(),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          // Main Content Area
-          Expanded(
-            // width: 0.7.sw,
-            // height: 0.9.sh,
-            child: PageView(
-              // pageSnapping: false,
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (newPage) {
-                _currentPageIndex = newPage;
-                setState(() {});
-              },
-              scrollDirection: Axis.vertical,
-              controller: pageController,
-              children: const [
-                Home(),
-                ConvertToPdf(),
-                ConvertFromPdf(),
-                SizedBox.shrink(),
-                PDFTools(),
-              ],
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -8,8 +8,9 @@ import 'package:pdf_to_word/utils/colors.dart';
 import 'package:pdf_to_word/utils/prefrences/user_prefs.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final Widget leading;
     const CustomAppBar({
-    super.key,
+    super.key, required this.leading,
   })  : preferredSize = const Size.fromHeight(kToolbarHeight);
 
   @override
@@ -25,6 +26,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      leading: widget.leading,
       title: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

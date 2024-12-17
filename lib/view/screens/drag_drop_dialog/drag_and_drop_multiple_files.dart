@@ -24,7 +24,12 @@ class DragDropDialogMultipleFiles extends StatefulWidget {
   final Widget? customUi;
 
   const DragDropDialogMultipleFiles(
-      {super.key, required this.fileTypeExtension, required this.callBack, required this.title, this.addCustomUI = false, this.customUi});
+      {super.key,
+      required this.fileTypeExtension,
+      required this.callBack,
+      required this.title,
+      this.addCustomUI = false,
+      this.customUi});
 
   @override
   State<DragDropDialogMultipleFiles> createState() => _DragDropDialogMultipleFilesState();
@@ -42,16 +47,16 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
       backgroundColor: Colors.transparent,
       clipBehavior: Clip.antiAlias,
       child: SizedBox(
-        width: 0.8.sw,
-        height: 0.7.sh,
+        width: 0.85.sw,
+        height: 0.85.sh,
         child: Stack(
           children: [
             // Main Card Container
 
             Positioned.fill(
               child: Container(
-                width: 0.8.sw,
-                height: 0.6.sh,
+                width: 0.85.sw,
+                height: 0.85.sh,
                 decoration: BoxDecoration(
                   color: context.read<ThemeCubit>().state.themeData == AppThemes.light
                       ? Colors.transparent
@@ -75,8 +80,8 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
                         widget.title,
-                        style: const TextStyle(
-                          fontSize: 30,
+                        style: TextStyle(
+                          fontSize: 22.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -84,9 +89,9 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                     const Spacer(),
                     // File Upload Area
                     Container(
-                      width: 0.55.sw,
-                      height: 0.55.sh,
-                      // padding: const EdgeInsets.all(25),
+                      width: 0.7.sw,
+                      height: 0.7.sh,
+                      padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
@@ -203,61 +208,65 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           if (selectedFilePath.isEmpty)
-                                            SvgPicture.asset('assets/svg/Upload.svg'),
-                                          const SizedBox(height: 16),
-                                          selectedFile.isEmpty
-                                              ? const Text(
+                                            SvgPicture.asset('assets/svg/Upload.svg',
+                                                width: 0.1.sw, height: 0.1.sh),
+                                           selectedFile.isEmpty
+                                              ? Text(
                                                   'Drag & Drop File Here',
                                                   style: TextStyle(
-                                                      fontWeight: FontWeight.w600, fontSize: 24),
+                                                      fontWeight: FontWeight.w600, fontSize: 18.sp),
                                                 )
-                                              :FittedBox(
-                                              fit: BoxFit.scaleDown,
-                                              child: Text("${selectedFile.length} files Selected",
-                                                  style: const TextStyle(
-                                                      fontWeight: FontWeight.w600,
-                                                      fontSize: 16)),),
-                                          if (selectedFilePath.isEmpty)
+                                              : FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: Text(
+                                                      "${selectedFile.length} files Selected",
+                                                      style: TextStyle(
+                                                          fontWeight: FontWeight.w600,
+                                                          fontSize: 18.sp)),
+                                                ),
+                                           if (selectedFilePath.isEmpty)
                                             Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Container(
-                                                margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                height: 0.8,
-                                                width: 100,
-                                                color: AppColors.grey,
-                                              ),
-                                              Text(
-                                                "OR",
-                                                style: TextStyle(
-                                                    color: Colors.grey.shade400,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontSize: 26),
-                                              ),
-                                              Container(
-                                                margin: const EdgeInsets.symmetric(horizontal: 10),
-                                                height: 0.8,
-                                                width: 100,
-                                                color: AppColors.grey,
-                                              ),
-                                            ],
-                                          ),
-                                          if (selectedFilePath.isNotEmpty && widget.addCustomUI )
-                                            widget.customUi!,
-                                          const SizedBox(height: 8),
-                                          FittedBox(
-                                            fit:BoxFit.scaleDown,
-                                            child: CustomButton(
-                                              onTap: () {
-                                                context
-                                                    .read<FilePickerCubit>()
-                                                    .pickMultipleFile(widget.fileTypeExtension);
-                                              },
-                                              title: selectedFilePath.isNotEmpty?"Add More Files":"Browse Files",
-                                              height: 0.06.sh,
-                                              width: 0.2.sw,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.symmetric(horizontal: 10),
+                                                  height: 0.8,
+                                                  width: 0.1.sw,
+                                                  color: AppColors.grey,
+                                                ),
+                                                Text(
+                                                  "OR",
+                                                  style: TextStyle(
+                                                      color: Colors.grey.shade400,
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 18.sp),
+                                                ),
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.symmetric(horizontal: 10),
+                                                  height: 0.8,
+                                                  width: 0.1.sw,
+                                                  color: AppColors.grey,
+                                                ),
+                                              ],
                                             ),
+                                          10.verticalSpace,
+                                          if (selectedFilePath.isNotEmpty && widget.addCustomUI)
+                                            widget.customUi!,
+                                          8.verticalSpace,
+                                          CustomButton(
+                                            onTap: () {
+                                              context
+                                                  .read<FilePickerCubit>()
+                                                  .pickMultipleFile(widget.fileTypeExtension);
+                                            },
+                                            title: selectedFilePath.isNotEmpty
+                                                ? "Add More Files"
+                                                : "Browse Files",
+                                            height: 0.07.sh,
+                                            width: 0.2.sw,
                                           ),
                                           5.verticalSpace,
                                           if (selectedFilePath.isNotEmpty)
@@ -266,8 +275,8 @@ class _DragDropDialogMultipleFilesState extends State<DragDropDialogMultipleFile
                                                 widget.callBack(selectedFilePath);
                                               },
                                               title: "Convert",
-                                              height: 0.06.sh,
-                                              width: 0.2.sw,
+                                              height: 0.07.sh,
+                                              width: 0.25.sw,
                                             ),
                                         ],
                                       );

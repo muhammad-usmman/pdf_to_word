@@ -14,13 +14,12 @@ import 'package:pdf_to_word/utils/colors.dart';
 import 'package:pdf_to_word/utils/themes.dart';
 import 'package:pdf_to_word/utils/toast_helper.dart';
 import 'package:pdf_to_word/view/screens/dowload_converted_file/dowload_multiple_converted_url.dart';
-import 'package:pdf_to_word/view/screens/dowload_converted_file/download_converted_url_page.dart';
 import 'package:pdf_to_word/view/screens/drag_drop_dialog/widget/input_field.dart';
 import 'package:pdf_to_word/view/shared/custom_button.dart';
 
 class DragDropLockUnlockPdfDialog extends StatefulWidget {
   final List<String> fileTypeExtension;
-   final String title;
+  final String title;
   final bool isLockPdf;
 
   //  final Function(String filePath, String fieldText)? callBackWithFields;
@@ -29,10 +28,7 @@ class DragDropLockUnlockPdfDialog extends StatefulWidget {
   // final bool inputFieldsRequired;
 
   const DragDropLockUnlockPdfDialog(
-      {super.key,
-      required this.fileTypeExtension,
-       required this.title,
-      required this.isLockPdf});
+      {super.key, required this.fileTypeExtension, required this.title, required this.isLockPdf});
 
   @override
   State<DragDropLockUnlockPdfDialog> createState() => _DragDropLockUnlockPdfDialogState();
@@ -60,7 +56,7 @@ class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialo
       clipBehavior: Clip.antiAlias,
       child: SizedBox(
         width: 0.8.sw,
-        height: 0.7.sh,
+        height: 0.8.sh,
         child: Stack(
           children: [
             // Main Card Container
@@ -68,7 +64,7 @@ class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialo
             Positioned.fill(
               child: Container(
                 width: 0.8.sw,
-                height: 0.6.sh,
+                height: 0.8.sh,
                 decoration: BoxDecoration(
                   color: context.read<ThemeCubit>().state.themeData == AppThemes.light
                       ? Colors.transparent
@@ -92,8 +88,8 @@ class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialo
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
                         widget.title,
-                        style: const TextStyle(
-                          fontSize: 30,
+                        style: TextStyle(
+                          fontSize: 22.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -101,8 +97,8 @@ class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialo
                     const Spacer(),
                     // File Upload Area
                     Container(
-                      width: 0.45.sw,
-                      height: 0.45.sh,
+                      width: 0.65.sw,
+                      height: 0.65.sh,
                       padding: const EdgeInsets.all(25),
                       decoration: BoxDecoration(
                         boxShadow: [
@@ -129,7 +125,6 @@ class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialo
                           if (state is ConversionLoadedAndDownloaded && mounted) {
                             ToastHelper.success(context, 'File conversion Successful');
                             Navigator.pop(context);
-
                           } else if (state is ConversionError && mounted) {
                             ToastHelper.success(context,
                                 'Something Unexpected happened. Check your Internet or Try again');
@@ -229,12 +224,13 @@ class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialo
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           if (selectedFilePath.isEmpty)
-                                            SvgPicture.asset('assets/svg/Upload.svg'),
-                                          const SizedBox(height: 16),
+                                            SvgPicture.asset('assets/svg/Upload.svg',
+                                                width: 0.1.sw, height: 0.1.sh),
+                                          16.verticalSpace,
                                           Text(
                                             selectedFile,
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w600, fontSize: 24),
+                                            style:   TextStyle(
+                                                fontWeight: FontWeight.w600, fontSize: 18.sp),
                                           ),
                                           if (selectedFilePath.isEmpty)
                                             Row(
@@ -245,7 +241,7 @@ class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialo
                                                   margin:
                                                       const EdgeInsets.symmetric(horizontal: 10),
                                                   height: 0.8,
-                                                  width: 100,
+                                                  width: 0.1.sw,
                                                   color: AppColors.grey,
                                                 ),
                                                 Text(
@@ -259,13 +255,12 @@ class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialo
                                                   margin:
                                                       const EdgeInsets.symmetric(horizontal: 10),
                                                   height: 0.8,
-                                                  width: 100,
+                                                  width: 0.1.sw,
                                                   color: AppColors.grey,
                                                 ),
                                               ],
                                             ),
-                                          const SizedBox(height: 8),
-                                          if (selectedFilePath.isEmpty)
+8.verticalSpace,                                          if (selectedFilePath.isEmpty)
                                             CustomButton(
                                               onTap: () {
                                                 context
@@ -278,32 +273,44 @@ class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialo
                                             ),
                                           if (widget.isLockPdf == true &&
                                               selectedFilePath.isNotEmpty)
-                                            Column(
+                                            Row(
                                               children: [
-                                                InputField(
-                                                  controller: userPasswordController,
-                                                  title: 'User Password',
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(horizontal: 16.0),
-                                                  child: Text(
-                                                    "PDF will open with the user password. With the user password, you cannot copy text or print the PDF.",
-                                                    style: const TextStyle(
-                                                        fontWeight: FontWeight.w300, fontSize: 12),
+                                                Expanded(
+                                                  child: Column(
+                                                    children: [
+                                                      InputField(
+                                                        controller: userPasswordController,
+                                                        title: 'User Password',
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets.symmetric(horizontal: 16.0),
+                                                        child: Text(
+                                                          "PDF will open with the user password. With the user password, you cannot copy text or print the PDF.",
+                                                          style:   TextStyle(
+                                                              fontWeight: FontWeight.w300, fontSize: 12.sp),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                InputField(
-                                                  controller: ownerPasswordController,
-                                                  title: 'Owner Password',
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(horizontal: 16.0),
-                                                  child: Text(
-                                                    "PDFs will also open with the owner's password. There will be no restrictions. You can copy text, print the PDF, and modify the document.",
-                                                    style: const TextStyle(
-                                                        fontWeight: FontWeight.w300, fontSize: 12),
+                                                Expanded(
+                                                  child: Column(
+                                                    children: [
+                                                      InputField(
+                                                        controller: ownerPasswordController,
+                                                        title: 'Owner Password',
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets.symmetric(horizontal: 16.0),
+                                                        child: Text(
+                                                          "PDFs will also open with the owner's password. There will be no restrictions. You can copy text, print the PDF, and modify the document.",
+                                                          style:   TextStyle(
+                                                              fontWeight: FontWeight.w300, fontSize: 12.sp),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],
@@ -343,14 +350,12 @@ class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialo
                                                     ToastHelper.warning(context,
                                                         'Provide both password to lock PDF', '');
                                                   }
-                                                }else if(widget.isLockPdf == false){
-
+                                                } else if (widget.isLockPdf == false) {
                                                   if (ownerPasswordController.text.isNotEmpty) {
-                                                    context.read<ConversionCubit>().  unLockPdf(
+                                                    context.read<ConversionCubit>().unLockPdf(
                                                         selectedFilePath,
                                                         selectedFile,
-                                                        ownerPasswordController.text
-                                                    );
+                                                        ownerPasswordController.text);
                                                   } else {
                                                     ToastHelper.warning(context,
                                                         "Provide Owner's password to lock PDF", '');
@@ -359,7 +364,7 @@ class _DragDropLockUnlockPdfDialogState extends State<DragDropLockUnlockPdfDialo
                                               },
                                               title: "Convert",
                                               height: 0.07.sh,
-                                              width: 0.2.sw,
+                                              width: 0.25.sw,
                                             ),
                                         ],
                                       );
