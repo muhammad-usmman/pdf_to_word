@@ -12,8 +12,9 @@ class ToolCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // height: 200,
-      // width: 200,
+      height: 0.05.sh,
+      width: 0.05.sh
+      ,
       child: GestureDetector(
         onTap: onTap,
         child: Card(

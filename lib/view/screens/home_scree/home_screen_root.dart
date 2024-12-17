@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: CustomAppBar(
             leading: isSmallScreen
                 ? IconButton(
-                    icon: Icon(_isDrawerOpen ? Icons.close : Icons.menu),
+                    icon: Icon( Icons.menu),
                     onPressed: () {
                       setState(() {
                         _isDrawerOpen = !_isDrawerOpen;
