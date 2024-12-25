@@ -23,4 +23,5 @@ class UserPrefs {
   static bool getPremiumStatus() {
     return prefs.getBool('premium') ?? false;
   }
+
 }

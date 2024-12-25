@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pdf_to_word/controller/cubits/conversion_cubit/conversion_cubit.dart';
 import 'package:pdf_to_word/controller/cubits/file_picker_cubit/file_picker_cubit.dart';
+import 'package:pdf_to_word/controller/cubits/premium_cubit/premium_cubit.dart';
 import 'package:pdf_to_word/controller/cubits/theme_Cubit/theme_cubit.dart';
 import 'package:pdf_to_word/controller/cubits/theme_Cubit/theme_state.dart';
 import 'package:pdf_to_word/utils/prefrences/user_prefs.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => ThemeCubit()),
         BlocProvider(create: (context) => FilePickerCubit()),
         BlocProvider(create: (context) => ConversionCubit()),
+        BlocProvider(create: (context) => PremiumCubit()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

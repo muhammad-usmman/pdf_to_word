@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pdf_to_word/controller/cubits/conversion_cubit/conversion_cubit.dart';
+import 'package:pdf_to_word/utils/prefrences/user_prefs.dart';
 import 'package:pdf_to_word/view/screens/drag_drop_dialog/drag_drop_dialog.dart';
 import 'package:pdf_to_word/view/screens/home_scree/widgets/images_to_pdf.dart';
+import 'package:pdf_to_word/view/screens/payment_screen/pro_screen.dart';
 import 'package:pdf_to_word/view/shared/tool_card.dart';
 
 class Home extends StatelessWidget {
@@ -24,10 +26,12 @@ class Home extends StatelessWidget {
                   label: 'Image to PDF',
                   svg: 'assets/svg/JPG to PDF.svg',
                   onTap: () {
+                    UserPrefs.getPremiumStatus()?
                     showDialog(
                       context: context,
                       builder: (BuildContext context) => ImagesToPdf(),
-                    );
+                    ) : Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (BuildContext context) => ProScreen()));
                   },
                 ),
                 ToolCard(

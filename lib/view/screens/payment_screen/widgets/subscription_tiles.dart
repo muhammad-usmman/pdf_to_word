@@ -13,95 +13,110 @@ class SubscriptionTiles extends StatelessWidget {
       required this.planName,
       required this.planDuration,
       required this.planPrice,
-      required this.planDiscountedPrice});
+      required this.planDiscountedPrice,
+      required this.onTap,
+      required this.lineThroughText});
 
   final bool active;
   final String planName;
   final String planDuration;
   final String planPrice;
   final String planDiscountedPrice;
+  final bool lineThroughText;
+  final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SizedBox(
-        width: 0.2.sw,
-        height: 320,
-        child: Card(
-          shape: RoundedRectangleBorder(
-              side: BorderSide(width: 1.5, color: active ? AppColors.red : Colors.transparent),
-              borderRadius: BorderRadius.circular(8)),
-          color: Theme.of(context).cardColor, // Explicitly inherit color from the theme
+      child: GestureDetector(
+        onTap: onTap,
+        child: SizedBox(
+          width: 0.2.sw,
+          height: 320,
+          child: Card(
+            shape: RoundedRectangleBorder(
+                side: BorderSide(width: 1.5, color: active ? AppColors.red : Colors.transparent),
+                borderRadius: BorderRadius.circular(8)),
+            color: Theme.of(context).cardColor, // Explicitly inherit color from the theme
 
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
-                child: SizedBox(
-                  width: double.infinity,
-
-                  child: Stack(
-                    children: [
-                      if (active)
-                        Positioned.fill(child: SvgPicture.asset('assets/svg/subsription_bg.svg')),
-                      Center(
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            planName,
-                            style: TextStyle(
-                                fontSize: 28,
-                                color: active
-                                    ? Colors.white
-                                    : context.read<ThemeCubit>().state.themeData == AppThemes.light
-                                        ? Colors.black
-                                        : Colors.white,
-                                fontWeight: FontWeight.w600),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Stack(
+                      children: [
+                        if (active)
+                          Positioned.fill(child: SvgPicture.asset('assets/svg/subsription_bg.svg')),
+                        Center(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              planName,
+                              style: TextStyle(
+                                  fontSize: 28,
+                                  color: active
+                                      ? Colors.white
+                                      : context.read<ThemeCubit>().state.themeData ==
+                                              AppThemes.light
+                                          ? Colors.black
+                                          : Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  planDuration,
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
-                ),
-              ),
-               FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  planDiscountedPrice,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                ),
-              ),
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  planPrice,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                ),
-              ),
-               if (active)
-                const FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    "Free Trail",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontStyle: FontStyle.italic,
-                      decoration: TextDecoration.underline,
-                      decorationColor: AppColors.red,
-                      color: AppColors.red,
+                      ],
                     ),
                   ),
                 ),
-            ],
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    planDuration,
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                  ),
+                ),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    planDiscountedPrice,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    planPrice,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      decoration:
+                          lineThroughText ? TextDecoration.lineThrough : TextDecoration.none,
+                    ),
+                  ),
+                ),
+                if (active)
+                  const FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      "Free Trail",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontStyle: FontStyle.italic,
+                        decoration: TextDecoration.underline,
+                        decorationColor: AppColors.red,
+                        color: AppColors.red,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

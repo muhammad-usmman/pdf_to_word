@@ -1,38 +1,73 @@
+import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:pdf_to_word/model/premium_manager/premium_manager.dart';
 import 'package:pdf_to_word/view/screens/home_scree/widgets/convert_from_pdf.dart';
 import 'package:pdf_to_word/view/screens/home_scree/widgets/convert_to_pdf.dart';
 import 'package:pdf_to_word/view/screens/home_scree/widgets/home.dart';
 import 'package:pdf_to_word/view/screens/home_scree/widgets/pdf_tools.dart';
-import 'package:pdf_to_word/view/screens/pdf_editor/pdf_editor.dart';
+import 'package:pdf_to_word/view/screens/splash_screen.dart';
 import 'package:pdf_to_word/view/shared/custom_app_bar.dart';
 import 'package:pdf_to_word/view/shared/drawer_item.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreenRoot extends StatefulWidget {
+  const HomeScreenRoot({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreenRoot> createState() => _HomeScreenRootState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenRootState extends State<HomeScreenRoot> {
   final PageController pageController = PageController();
   int _currentPageIndex = 0;
   bool autoOpenClose = true;
-  bool _isDrawerOpen = true; // Tracks whether the drawer is open
-  static const double smallScreenThreshold = 1400; // Threshold for small screens
+  bool _isDrawerOpen = true;
+  static const double smallScreenThreshold = 1400;
+  final InAppPurchase inAppPurchase = InAppPurchase.instance;
+  late PremiumManager premiumManager;
+  late ProductDetails product;
+  late StreamSubscription<List<PurchaseDetails>> _purchaseSubscription;
+
+  @override
+  void initState() {
+    if (Platform.isIOS || Platform.isMacOS) {
+      premiumManager = PremiumManager(inAppPurchase: inAppPurchase);
+      final Stream<List<PurchaseDetails>> purchaseUpdated = inAppPurchase.purchaseStream;
+      _purchaseSubscription = purchaseUpdated.listen(
+        (List<PurchaseDetails> purchaseDetailsList) {
+          premiumManager.listenToPurchaseUpdated(purchaseDetailsList, () {}, () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (BuildContext context) => const SplashScreen()));
+          });
+        },
+        onDone: () {
+          _purchaseSubscription.cancel();
+        },
+      );
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    if (Platform.isIOS || Platform.isMacOS) {
+      premiumManager.dispose();
+      _purchaseSubscription.cancel();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Determine if the screen is small or large
         bool isSmallScreen = constraints.maxWidth < smallScreenThreshold;
 
-        // Automatically close the drawer if the screen becomes small
         if (isSmallScreen && _isDrawerOpen && autoOpenClose) {
           _isDrawerOpen = false;
         }
@@ -45,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
           appBar: CustomAppBar(
             leading: isSmallScreen
                 ? IconButton(
-                    icon: Icon( Icons.menu),
+                    icon: Icon(Icons.menu),
                     onPressed: () {
                       setState(() {
                         _isDrawerOpen = !_isDrawerOpen;
@@ -109,24 +144,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                 }
                               },
                             ),
-                            DrawerItem(
-                              selected: _currentPageIndex == 3,
-                              svg: 'assets/svg/PDF editor.svg',
-                              label: 'PDF Editor',
-                              onTap: () {
-
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) => const PDFEditor(),
-                                  ),
-                                );
-                                log(_currentPageIndex.toString());
-                                if (isSmallScreen) {
-                                  setState(() => _isDrawerOpen = false);
-                                }
-                              },
-                            ),
+                            // DrawerItem(
+                            //   selected: _currentPageIndex == 3,
+                            //   svg: 'assets/svg/PDF editor.svg',
+                            //   label: 'PDF Editor',
+                            //   onTap: () {
+                            //     Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //         builder: (BuildContext context) => const PDFEditor(),
+                            //       ),
+                            //     );
+                            //     log(_currentPageIndex.toString());
+                            //     if (isSmallScreen) {
+                            //       setState(() => _isDrawerOpen = false);
+                            //     }
+                            //   },
+                            // ),
                             DrawerItem(
                               selected: _currentPageIndex == 4,
                               svg: 'assets/svg/PDF tools.svg',

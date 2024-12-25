@@ -37,11 +37,12 @@ class ProFeatures extends StatelessWidget {
                   SvgPicture.asset('assets/svg/check_mark.svg'),
                   10.horizontalSpace,
                   const Text(
-                    'PDF Editor',
+                    'Batch Conversions',
                     style: TextStyle(color: Colors.white),
                   ),
                 ],
               ),
+
               Row(
                 children: [
                   SvgPicture.asset('assets/svg/check_mark.svg'),
@@ -54,32 +55,32 @@ class ProFeatures extends StatelessWidget {
               ),
             ],
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  SvgPicture.asset('assets/svg/check_mark.svg'),
-                  10.horizontalSpace,
-                  const Text(
-                    'Batch Conversions',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  SvgPicture.asset('assets/svg/check_mark.svg'),
-                  10.horizontalSpace,
-                  const Text(
-                    'Add Watermarks in PDF',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-            ],
-          ),
+          // Column(
+          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     // Row(
+          //     //   children: [
+          //     //     SvgPicture.asset('assets/svg/check_mark.svg'),
+          //     //     10.horizontalSpace,
+          //     //     // const Text(
+          //     //     //   'PDF Editor',
+          //     //     //   style: TextStyle(color: Colors.white),
+          //     //     // ),
+          //     //   ],
+          //     // ),
+          //     // Row(
+          //     //   children: [
+          //     //     SvgPicture.asset('assets/svg/check_mark.svg'),
+          //     //     10.horizontalSpace,
+          //     //     // const Text(
+          //     //     //   'Add Watermarks in PDF',
+          //     //     //   style: TextStyle(color: Colors.white),
+          //     //     // ),
+          //     //   ],
+          //     // ),
+          //   ],
+          // ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
