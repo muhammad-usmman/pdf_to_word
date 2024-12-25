@@ -32,7 +32,6 @@ class _ProScreenState extends State<ProScreen> {
 
   @override
   void initState() {
-    premiumManager = PremiumManager(inAppPurchase: inAppPurchase);
 
     if (Platform.isIOS || Platform.isMacOS) {
       premiumManager = PremiumManager(inAppPurchase: inAppPurchase);
@@ -52,8 +51,6 @@ class _ProScreenState extends State<ProScreen> {
       );
       context.read<PremiumCubit>().getProductDetails(premiumManager);
     }
-    context.read<PremiumCubit>().getProductDetails(premiumManager);
-
     super.initState();
   }
 
